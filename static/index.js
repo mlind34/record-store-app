@@ -1,24 +1,36 @@
+function addCustomer() {
 
+    let name = document.getElementById('addCustomer');
 
-const baseUrl = 'http://flip2.engr.oregonstate.edu:6743/customers'
+    let customer = {
+        name: name.value
+    }
 
-// Post new info to table
-const postTest = () => {
-    var req = new XMLHttpRequest();
+    fetch(`${window.origin}/customers/add-customer`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(customer),
+        cache: "no-cache",
+        headers: new Headers({
+            "content-type": "application/json"
+        })
     
-    req.open("POST", baseUrl, true);
-    req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-    req.addEventListener('load', function(){
-        if(req.status >= 200 && req.status < 400){
-            console.log(this.responseText)   
-        } else {
-            console.log('error in network request ' + req.statusText);
-        }
-    });
-    req.send();
-    event.preventDefault();
-}
+    }).then(function(response) {
 
-testBtn.addEventListener('click', function(){
-    postTest();
-})
+        if (response.status !== 200){
+            
+            console.log(`Error in request ${response.status}`);
+
+            return ;
+
+        }
+
+        response.json().then(function(data) {
+
+            console.log(data)
+
+        })
+
+    })
+
+}

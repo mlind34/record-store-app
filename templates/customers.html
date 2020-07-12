@@ -1,32 +1,43 @@
-<h1>Customers</h1>
+{% extends "layout.html" %}
+{% block content %}
 
-<table border="2">
-    <thead>
-        <tr>
-            <td>First Name</td>
-            <td>Last Name</td>
-            <td>Street</td>
-            <td>City</td>
-            <td>State</td>
-            <td>Zip</td>
-            <td>Phone Number</td>
-            <td>Email</td>
-        </tr>
-    </thead>
-    <tbody>
-        <!-- Database info here -->
-    </tbody>
-</table>
+<h1 id="customerTitle">Customers</h1>
 
-
-<input type="button" name="add" id="addCustomer" value="Add Customer">
-<input type="button" name="delete" id="deleteCustomer" value="Delete Customer">
-<input type="button" name="update" id="updateCustomer" value="Update Customer">
-
-<form action="" method="POST">
-    <input type="text" name="" id="test">
-    <input type="button" name="" id="testBtn" value="test">
+<form action="/customers/add-customer">
+  <input type="submit" class="big ui primary button" id="addCustomerBtn" value="Add Customer">
 </form>
 
+<table class="ui striped table customer-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Street Address</th>
+        <th>City, State</th>
+        <th>Zip Code</th>
+        <th>E-mail address</th>
+        <th>Phone Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customers %}
+      <tr>
+          <td>{{ customer.id }}</td>
+          <td>{{ customer.fname }} {{customer.lname }}</td>
+          <td>{{ customer.street }}</td>
+          <td>{{ customer.city }}, {{ customer.state }}</td>
+          <td>{{ customer.zip }}</td>
+          <td>{{ customer.email }}</td>
+          <td>{{ customer.phone }}</td>
+      </tr>
+      {% endfor %}
+      
+      
+    </tbody>
+      
+  </table>
 
-<script src="/static/index.js"></script>
+  
+
+
+{% endblock %}

@@ -1,10 +1,16 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% extends "layout.html" %}
+{% block content%}
 
-<h1>Welcome to Groovie's Record Store</h1>
 
-<div class="button-wrapper">
-    <input type="button" name="inventory" id="inventory" value="Inventory" onclick="location.href='/inventory';">
-    <input type="button" name="customers" id="customers" value="Customer Info" onclick="location.href='/customers';">
-    <input type="button" name="distributors" id="distributors" value="Distributor Info" onclick="location.href='/distributors';">
-</div>
+    <div class="home-header">
+        <h1 id="title">Groovie's Record Shop</h1>
+        <div class="button-wrapper">
+            <input class="big ui button" type="button" name="inventory" id="inventory" value="Inventory" onclick="location.href='/inventory';">
+            <input class="big ui button" type="button" name="customers" id="customers" value="Customer Info" onclick="location.href='/customers';">
+            <input class="big ui button" type="button" name="distributors" id="distributors" value="Distributor Info" onclick="location.href='/distributors';">
+        </div>
+    </div>
 
+    
+
+{% endblock content%}

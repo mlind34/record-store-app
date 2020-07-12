@@ -1,0 +1,72 @@
+/* Home Page Title Text */
+#title {
+    text-align: center;
+    padding-top: 10%;
+    padding-right: 30%;
+    color: rgb(233,229,241);
+    text-transform: uppercase;
+    font-size: 3.5rem;
+}
+
+/* Customer table */
+.ui.table {
+    font-size: 1em;
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 2%;
+    text-align: left;
+}
+
+/* Navigation Bar */
+.ui.menu {
+    border-radius: 0px;
+    background-color: #c5c8cc;
+    margin: 0;
+}
+
+/* State Dropdown */
+#state {
+    width: 15%;
+}
+
+
+/* Home Page Background Image */
+.home-header {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+        ),
+        url(https://images.unsplash.com/photo-1582751836565-74f64cc184cb?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=mick-haupt-CbNBjnXXhNg-unsplash.jpg);
+        background-size: cover;
+        height: 100vh;
+        
+}
+
+/* Customer Page Header */
+#customerTitle {
+    text-align: center;
+}
+
+.button-wrapper {
+    text-align: center;
+    margin-top: 20%;
+}
+
+/* Home Page Buttons */
+.ui.big.button {
+    margin: 5%;
+    width: 20%;
+    background-color: #c5c8cc;
+}
+
+/* Customer Page Container */
+.ui.container {
+    padding-top: 5%;
+}
+
+
+#addCustomerBtn {
+    margin: 0% 0% 0% 10%;
+    background-color: #82a7d8;
+}
