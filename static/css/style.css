@@ -8,6 +8,12 @@
     font-size: 3.5rem;
 }
 
+.ui.search {
+    text-align: end;
+    margin-right: 10%;
+    bottom: 3%;
+}
+
 /* Customer table */
 .ui.table {
     font-size: 1em;
@@ -28,7 +34,6 @@
 #state {
     width: 15%;
 }
-
 
 /* Home Page Background Image */
 .home-header {

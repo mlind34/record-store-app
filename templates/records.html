@@ -6,6 +6,11 @@
   <input type="submit" class="big ui primary button" id="addBtn" value="Add Record">
 </form>
 
+<div class="ui search">
+  <input class="prompt" type="text" placeholder="Search Something..." style="width: 30%;">
+  <div class="results"></div>
+</div>
+
 <table class="ui striped table records-table" id="recordsTable">
     <thead>
       <tr>
@@ -14,7 +19,6 @@
         <th>Quantity</th>
         <th>Year</th>
         <th>Artist</th>
-        <th>Type</th>
         <th>Name</th>
         <th>Delete</th>
         <th>Update</th>
@@ -25,14 +29,13 @@
       {% for record in records %}
       <tr id="{{ record.id }}">
           <td class="rec-input">{{ record.id }}</td>
-          <td class="rec-input">{{ record.price }}</td>
+          <td class="rec-input">${{ record.price }}</td>
           <td class="rec-input">{{ record.quantity }}</td>
-          <td class="rec-input">{{ record.artist }}</td>
           <td class="rec-input">{{ record.year }}</td>
-          <td class="rec-input">{{ record.type }}</td>
+          <td class="rec-input">{{ record.artist }}</td>
           <td class="rec-input">{{ record.name }}</td>
-          <td><input type="submit" value="Delete"></td>
-          <td><input type="submit" value="Update" id="{{ record.id }}"></td>
+          <td><input class="ui red button" type="submit" value="Delete"></td>
+          <td><input class="ui teal button" type="submit" value="Update" id="{{ record.id }}"></td>
       </tr>
       {% endfor %}
       

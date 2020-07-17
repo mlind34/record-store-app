@@ -94,30 +94,27 @@ def add_distributor():
 def show_records():
     records = [{
         'id': 200,
-        'price': 'Record Warehouse',
-        'quantity': '456 Dist Street',
-        'year': 'Los Angeles',
-        'artist': 'California',
-        'type': '78259',
-        'name': '(888) 703-6517'
+        'price': '20',
+        'quantity': '12',
+        'year': '1985',
+        'artist': 'John Smith',
+        'name': "John's Best"
         },
         {
         'id': 201,
-        'price': 'Record Warehouse',
-        'quantity': '456 Dist Street',
-        'year': 'Los Angeles',
-        'artist': 'California',
-        'type': '78259',
-        'name': '(888) 703-6517'
+        'price': '40',
+        'quantity': '8',
+        'year': '1958',
+        'artist': 'George JSON',
+        'name': 'String Theory'
         },
         {
         'id': 201,
-        'price': 'Record Warehouse',
-        'quantity': '456 Dist Street',
-        'year': 'Los Angeles',
-        'artist': 'California',
-        'type': '78259',
-        'name': '(888) 703-6517'
+        'price': '28',
+        'quantity': '26',
+        'year': '2001',
+        'artist': 'Foo',
+        'name': 'Bar'
         },
     ]
     return render_template('records.html', records = records)
