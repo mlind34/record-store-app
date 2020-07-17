@@ -91,7 +91,17 @@ def add_distributor():
 
 
 
-@app.route('/inventory')
+@app.route('/products')
 def show_inventory():
+<<<<<<< HEAD
 
     return render_template('inventory.html')
+=======
+    
+    return render_template('products.html')
+
+@app.route('/products/add-product')
+def add_inventory():
+    
+    return render_template('products.html')
+>>>>>>> 0a56414cc8ef9f95553209d36002892aee948b8f
