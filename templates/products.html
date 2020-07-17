@@ -1,13 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
+<h1 id="products">Customers</h1>
 
-<h1 id="customerTitle">Customers</h1>
-
-<form action="/customers/add-customer">
+<form action="/inventory/add-inventory">
   <input type="submit" class="big ui primary button" id="addCustomerBtn" value="Add Customer">
 </form>
 
-<table class="ui striped table customer-table" id="customerTable">
+<table class="ui striped table inventory-table" id="inventoryTable">
     <thead>
       <tr>
         <th>ID</th>
@@ -24,9 +23,9 @@
     <tbody>
       
       {% for customer in customers %}
-      <tr id="{{ customer.id }}">
-          <td class="cust-input">{{ customer.id }}</td>
-          <td class="cust-input">{{ customer.fname }} {{customer.lname }}</td>
+      <tr id="{{ product.id }}">
+          <td class="inv-input">{{ customer.id }}</td>
+          <td class="inv-input">{{ customer.fname }} {{customer.lname }}</td>
           <td class="cust-input">{{ customer.street }}</td>
           <td class="cust-input">{{ customer.city }}, {{ customer.state }}</td>
           <td class="cust-input">{{ customer.zip }}</td>
@@ -42,5 +41,5 @@
       
   </table>
 
-{% endblock %}
 
+{% endblock %}
