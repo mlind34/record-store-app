@@ -44,7 +44,7 @@
 }
 
 /* Customer Page Header */
-#customerTitle {
+#tableTitle {
     text-align: center;
 }
 
@@ -66,7 +66,7 @@
 }
 
 
-#addCustomerBtn {
+#addBtn {
     margin: 0% 0% 0% 10%;
     background-color: #82a7d8;
 }

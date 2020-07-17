@@ -13,7 +13,7 @@ customerTable.addEventListener('click', function(){
 const updateRow = (id) => {
     var rowToUpdate = document.getElementById(id);
     
-    dataCell = rowToUpdate.getElementsByClassName('cust-input');
+    dataCell = rowToUpdate.getElementsByClassName('table-input');
 
     for(var i = 0; i < dataCell.length; i++){
         input = document.createElement('input');

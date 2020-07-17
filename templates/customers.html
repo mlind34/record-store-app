@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1 id="customerTitle">Customers</h1>
+<h1 id="tableTitle">Customers</h1>
 
 <form action="/customers/add-customer">
-  <input type="submit" class="big ui primary button" id="addCustomerBtn" value="Add Customer">
+  <input type="submit" class="big ui primary button" id="addBtn" value="Add Customer">
 </form>
 
 <table class="ui striped table customer-table" id="customerTable">
@@ -42,7 +42,45 @@
       
   </table>
 
+  <script>
+    const customerTable = document.getElementById('customerTable');
+
+
+    customerTable.addEventListener('click', function(){
+        let target = event.target;
+        if(target.value == 'Update'){
+            var confirm = makeConfirm(target)
+            updateRow(target.id);
+        }
+    });
+
+
+    const updateRow = (id) => {
+        var rowToUpdate = document.getElementById(id);
+        
+        dataCell = rowToUpdate.getElementsByClassName('table-input');
+
+        for(var i = 0; i < dataCell.length; i++){
+            input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+
+            input.setAttribute('size', '17')
+
+            input.setAttribute('value', dataCell[i].innerHTML)
+
+            dataCell[i].innerHTML = '';
+
+            dataCell[i].append(input);
+        }
+    }
+
+
+    const makeConfirm = (button) => {
+        button.setAttribute('value', 'Confirm');
+        button.style.backgroundColor = 'rgb(100, 150, 240)'
+        return button;
+    }
+  </script>
+
 {% endblock %}
-
-
-<input type="text" name="id" class="cust-input" disabled="true" value= "{{ customer.id }}"

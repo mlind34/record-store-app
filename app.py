@@ -54,7 +54,7 @@ def add_customer():
 def show_distributor():
 
     distributors = [{
-        'id': 100,
+        'id': 200,
         'name': 'Record Warehouse',
         'street': '456 Dist Street',
         'city': 'Los Angeles',
@@ -63,7 +63,7 @@ def show_distributor():
         'phone': '(888) 703-6517'
         },
         {
-        'id': 101,
+        'id': 201,
         'name': 'Record Warehouse',
         'street': '456 Dist Street',
         'city': 'Los Angeles',
@@ -72,7 +72,7 @@ def show_distributor():
         'phone': '(888) 703-6517'
         },
         {
-        'id': 102,
+        'id': 202,
         'name': 'Record Warehouse',
         'street': '456 Dist Street',
         'city': 'Los Angeles',
@@ -93,5 +93,5 @@ def add_distributor():
 
 @app.route('/inventory')
 def show_inventory():
-    
+
     return render_template('inventory.html')

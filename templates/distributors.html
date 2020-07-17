@@ -1,15 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<h1 id="customerTitle">Distributors</h1>
+<h1 id="tableTitle">Distributors</h1>
 
 <form action="/distributors/add-distributor">
-  <input type="submit" class="big ui primary button" id="addDistributorBtn" value="Add Distributor">
+  <input type="submit" class="big ui primary button" id="addBtn" value="Add Distributor">
 </form>
 
-<table class="ui striped table customer-table" id="customerTable">
+<table class="ui striped table distributor-table" id="distributorTable">
     <thead>
       <tr>
+        <th>ID</th>
         <th>Name</th>
         <th>Street Address</th>
         <th>City, State</th>
@@ -20,5 +21,60 @@
       </tr>
     </thead>
     <tbody>
+
+        {% for distributor in distributors %}
+      <tr id="{{ distributor.id }}">
+          <td class="dist-input">{{ distributor.id }}</td>
+          <td class="dist-input">{{ distributor.name }}</td>
+          <td class="dist-input">{{ distributor.street }}</td>
+          <td class="dist-input">{{ distributor.city }}, {{ distributor.state }}</td>
+          <td class="dist-input">{{ distributor.zip }}</td>
+          <td class="dist-input">{{ distributor.phone }}</td>
+          <td><input type="submit" value="Delete"></td>
+          <td><input type="submit" value="Update" id="{{ distributor.id }}"></td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+
+    <script>
+        const distributorTable = document.getElementById('distributorTable');
+    
+    
+        distributorTable.addEventListener('click', function(){
+            let target = event.target;
+            if(target.value == 'Update'){
+                var confirm = makeConfirm(target)
+                updateRow(target.id);
+            }
+        });
+    
+    
+        const updateRow = (id) => {
+            var rowToUpdate = document.getElementById(id);
+            
+            dataCell = rowToUpdate.getElementsByClassName('dist-input');
+    
+            for(var i = 0; i < dataCell.length; i++){
+                input = document.createElement('input');
+    
+                input.setAttribute('type', 'text');
+    
+                input.setAttribute('size', '17')
+    
+                input.setAttribute('value', dataCell[i].innerHTML)
+    
+                dataCell[i].innerHTML = '';
+    
+                dataCell[i].append(input);
+            }
+        }
+    
+        const makeConfirm = (button) => {
+            button.setAttribute('value', 'Confirm');
+            button.style.backgroundColor = 'rgb(100, 150, 240)'
+            return button;
+        }
+      </script>
 
 {% endblock %}
