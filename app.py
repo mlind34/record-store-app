@@ -5,10 +5,9 @@ app = Flask(__name__)
 def test():
     return render_template('home.html')
 
-@app.route('/customers')
+@app.route('/customers', methods=['GET'])
 def show_customer():
-    customers = [
-        {
+    customers = [{
         'id': 100,
         'fname': 'Max',
         'lname': 'lind',
@@ -21,17 +20,6 @@ def show_customer():
         },
         {
         'id': 101,
-        'fname': 'Alex',
-        'lname': 'DeWald',
-        'street': '456 Another Fake Street',
-        'city': 'Lincoln',
-        'state': 'Nebraska',
-        'zip': '79872',
-        'email': 'alexdewald@yahoo.com',
-        'phone': '(231) 901-2356'
-        },
-        {
-        'id': 100,
         'fname': 'Max',
         'lname': 'lind',
         'street': '123 Fake Street',
@@ -42,24 +30,23 @@ def show_customer():
         'phone': '(432) 786-9087'
         },
         {
-        'id': 101,
-        'fname': 'Alex',
-        'lname': 'DeWald',
-        'street': '456 Another Fake Street',
-        'city': 'Lincoln',
-        'state': 'Nebraska',
-        'zip': '79872',
-        'email': 'alexdewald@yahoo.com',
-        'phone': '(231) 901-2356'
+        'id': 102,
+        'fname': 'Max',
+        'lname': 'lind',
+        'street': '123 Fake Street',
+        'city': 'San Antonio',
+        'state': 'Texas',
+        'zip': '78259',
+        'email': 'maxlind@yahoo.com',
+        'phone': '(432) 786-9087'
         }
     ]
 
-    return render_template('customers.html', title='Customers', customers=customers)
+    return render_template('customers.html', customers=customers)
     
 
 @app.route('/customers/add-customer')
 def add_customer():
-    
     return render_template('addcustomer.html')
 
 

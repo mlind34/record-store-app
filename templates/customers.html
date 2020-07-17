@@ -7,7 +7,7 @@
   <input type="submit" class="big ui primary button" id="addCustomerBtn" value="Add Customer">
 </form>
 
-<table class="ui striped table customer-table">
+<table class="ui striped table customer-table" id="customerTable">
     <thead>
       <tr>
         <th>ID</th>
@@ -17,18 +17,23 @@
         <th>Zip Code</th>
         <th>E-mail address</th>
         <th>Phone Number</th>
+        <th>Delete</th>
+        <th>Update</th>
       </tr>
     </thead>
     <tbody>
+      
       {% for customer in customers %}
-      <tr>
-          <td>{{ customer.id }}</td>
-          <td>{{ customer.fname }} {{customer.lname }}</td>
+      <tr id="{{ customer.id }}">
+          <td><input type="text" name="id" class="cust-input" disabled="true" value= "{{ customer.id }}"></td>
+          <td><input type="text" name="name" disabled="true" class="cust-input" value= "{{ customer.fname }} {{customer.lname }}"></td>
           <td>{{ customer.street }}</td>
           <td>{{ customer.city }}, {{ customer.state }}</td>
           <td>{{ customer.zip }}</td>
           <td>{{ customer.email }}</td>
           <td>{{ customer.phone }}</td>
+          <td><input type="submit" value="Delete"></td>
+          <td><input type="submit" value="Update" id="{{ customer.id }}"></td>
       </tr>
       {% endfor %}
       
@@ -36,8 +41,5 @@
     </tbody>
       
   </table>
-
-  
-
 
 {% endblock %}
