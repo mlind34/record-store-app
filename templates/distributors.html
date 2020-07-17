@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1 id="customerTitle">Distributors</h1>
+
+<form action="/distributors/add-distributor">
+  <input type="submit" class="big ui primary button" id="addDistributorBtn" value="Add Distributor">
+</form>
+
+<table class="ui striped table customer-table" id="customerTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Street Address</th>
+        <th>City, State</th>
+        <th>Zip Code</th>
+        <th>Phone Number</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+
+{% endblock %}

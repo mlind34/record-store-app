@@ -13,13 +13,23 @@ customerTable.addEventListener('click', function(){
 const updateRow = (id) => {
     var rowToUpdate = document.getElementById(id);
     
-    inputs = rowToUpdate.getElementsByClassName('cust-input');
-    
-    for(var i = 0; i < inputs.length; i++){
-        inputs[i].disabled = false;
-    }
+    dataCell = rowToUpdate.getElementsByClassName('cust-input');
 
+    for(var i = 0; i < dataCell.length; i++){
+        input = document.createElement('input');
+
+        input.setAttribute('type', 'text');
+
+        input.setAttribute('size', '17')
+
+        input.setAttribute('value', dataCell[i].innerHTML)
+
+        dataCell[i].innerHTML = '';
+
+        dataCell[i].append(input);
+    }
 }
+
 
 const makeConfirm = (button) => {
     button.setAttribute('value', 'Confirm');
