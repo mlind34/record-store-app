@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1 id="tableTitle">Purchases</h1>
+
+<div class="head-btn-wrapper">
+  <form action="/purchases/add-purchases">
+    <input type="submit" class="big ui primary button" id="addBtn" value="Add Purchase">
+  </form>
+</div>
+
+<table class="ui striped table purchases-table" id="purchasesTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Method</th>
+        <th>Payment Confirmation</th>
+        <th>Total</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for purchase in purchases %}
+      <tr id="{{ purchase.id }}">
+          <td class="purch-input">{{ purchase.purchaseDate }}</td>
+          <td class="purch-input">{{ purchase.paymentMethod }}</td>
+            {% if purchase.paid == True %}
+          <td class="purch-input">Confirmed</td>
+            {% else %}
+            <td class="purch-input">Missing Payment</td>
+            {% endif %}
+          <td class="purch-input">{{ purchase.totalPrice }}</td>
+          <td><input type="submit" value="Delete" class="ui red button"></td>
+          <td><input type="submit" value="Update" class="ui teal button" id="{{ purchases.id }}"></td>
+      </tr>
+      {% endfor %}
+      
+      
+    </tbody>
+      
+  </table>
+
+  <script>
+    const purchasesTable = document.getElementById('purchasesTable');
+
+
+    purchasesTable.addEventListener('click', function(){
+        let target = event.target;
+        if(target.value == 'Update'){
+            var confirm = makeConfirm(target)
+            updatepurchasesRow(target.id);
+        }
+    });
+
+
+    const updatepurchasesRow = (id) => {
+        var rowToUpdate = document.getElementById(id);
+        
+        dataCell = rowToUpdate.getElementsByClassName('purch-input');
+
+        for(var i = 0; i < dataCell.length; i++){
+            input = document.createElement('input');
+
+            input.setAttribute('type', 'text');
+
+            input.setAttribute('size', '17')
+
+            input.setAttribute('value', dataCell[i].innerHTML)
+
+            dataCell[i].innerHTML = '';
+
+            dataCell[i].append(input);
+        }
+    }
+
+
+    const makeConfirm = (button) => {
+        button.setAttribute('value', 'Confirm');
+        button.style.backgroundColor = 'rgb(100, 150, 240)'
+        return button;
+    }
+  </script>
+
+{% endblock %}
