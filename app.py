@@ -89,6 +89,7 @@ def add_distributor():
     return render_template('addistributor.html')
 
 
+<<<<<<< HEAD
 
 
 @app.route('/records')
@@ -127,3 +128,9 @@ def show_records():
 def add_record():
 
     return render_template('addrecord.html')
+=======
+@app.route('/records')
+def show_inventory():
+
+    return render_template('records.html')
+>>>>>>> 2a6f72053b573f6e82d44913aef25ef4bfed9265

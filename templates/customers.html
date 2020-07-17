@@ -10,7 +10,7 @@
 <table class="ui striped table customer-table" id="customerTable">
     <thead>
       <tr>
-        <th>ID</th>
+        
         <th>Name</th>
         <th>Street Address</th>
         <th>City, State</th>
@@ -25,15 +25,15 @@
       
       {% for customer in customers %}
       <tr id="{{ customer.id }}">
-          <td class="cust-input">{{ customer.id }}</td>
+          
           <td class="cust-input">{{ customer.fname }} {{customer.lname }}</td>
           <td class="cust-input">{{ customer.street }}</td>
           <td class="cust-input">{{ customer.city }}, {{ customer.state }}</td>
           <td class="cust-input">{{ customer.zip }}</td>
           <td class="cust-input">{{ customer.email }}</td>
           <td class="cust-input">{{ customer.phone }}</td>
-          <td><input type="submit" value="Delete"></td>
-          <td><input type="submit" value="Update" id="{{ customer.id }}"></td>
+          <td><input type="submit" value="Delete" class="ui red button"></td>
+          <td><input type="submit" value="Update" class="ui teal button" id="{{ customer.id }}"></td>
       </tr>
       {% endfor %}
       
@@ -50,15 +50,15 @@
         let target = event.target;
         if(target.value == 'Update'){
             var confirm = makeConfirm(target)
-            updateRow(target.id);
+            updateCustomerRow(target.id);
         }
     });
 
 
-    const updateRow = (id) => {
+    const updateCustomerRow = (id) => {
         var rowToUpdate = document.getElementById(id);
         
-        dataCell = rowToUpdate.getElementsByClassName('table-input');
+        dataCell = rowToUpdate.getElementsByClassName('cust-input');
 
         for(var i = 0; i < dataCell.length; i++){
             input = document.createElement('input');
