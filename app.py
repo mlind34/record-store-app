@@ -2,7 +2,11 @@ from flask import Flask, render_template, request, jsonify, make_response
 app = Flask(__name__)
 
 @app.route('/')
-def test():
+def index():
+    return render_template('index.html')
+
+@app.route('/home')
+def home():
     return render_template('home.html')
 
 @app.route('/customers', methods=['GET'])
@@ -42,12 +46,12 @@ def show_customer():
         }
     ]
 
-    return render_template('customers.html', customers=customers)
+    return render_template('customers.html', customers=customers, title='Customers')
     
 
 @app.route('/customers/add-customer')
 def add_customer():
-    return render_template('addcustomer.html')
+    return render_template('addcustomer.html', title='Add Customer')
 
 
 @app.route('/distributors')
@@ -81,14 +85,18 @@ def show_distributor():
         'phone': '(888) 703-6517'
         },
     ]
-    return render_template('distributors.html', distributors=distributors)
+    return render_template('distributors.html', distributors=distributors, title='Distributors')
 
 @app.route('/distributors/add-distributor')
 def add_distributor():
 
-    return render_template('addistributor.html')
+    return render_template('addistributor.html', title='Add Distributor')
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4c471b7bfa45722968eef62a4e8d6c6479c33d2
 
 @app.route('/records')
 def show_records():
@@ -117,7 +125,7 @@ def show_records():
         'name': 'Bar'
         },
     ]
-    return render_template('records.html', records = records)
+    return render_template('records.html', records = records, title='Records')
 
 @app.route('/records/add-record')
 def add_record():
