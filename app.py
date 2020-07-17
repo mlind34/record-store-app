@@ -93,10 +93,6 @@ def add_distributor():
     return render_template('addistributor.html', title='Add Distributor')
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c4c471b7bfa45722968eef62a4e8d6c6479c33d2
 
 @app.route('/records')
 def show_records():
@@ -131,3 +127,42 @@ def show_records():
 def add_record():
 
     return render_template('addrecord.html')
+
+
+@app.route('/purchases')
+def view_purchases():
+    purchases = [
+        {
+            'id': 709,
+            'purchaseDate': '01-23-2019',
+            'paymentMethod': 'Card',
+            'paid': True,
+            'totalPrice': 56.98 
+        },
+        {
+            'id': 710,
+            'purchaseDate': '11-29-2017',
+            'paymentMethod': 'Cash',
+            'paid': True,
+            'totalPrice': 45.18 
+        },
+        {
+            'id': 711,
+            'purchaseDate': '05-03-2018',
+            'paymentMethod': 'Card',
+            'paid': True,
+            'totalPrice': 5.67 
+        }
+    ]
+    return render_template('purchases.html', purchases=purchases, title='Purchases')
+
+
+@app.route('/purchases/add-purchase')
+def add_purchase():
+
+    return render_template('addpurchase.html', title='Add Purchase')
+
+
+@app.route('/orders')
+def view_orders():
+    return render_template('orders.html', title='Orders')

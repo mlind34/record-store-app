@@ -28,12 +28,12 @@
       {% for order in orders %}
       <tr id="{{ order.id }}">
           
-          <td class="cust-input">{{ order.fname }} {{order.lname }}</td>
-          <td class="cust-input">{{ order.street }}</td>
-          <td class="cust-input">{{ order.city }}, {{ order.state }}</td>
-          <td class="cust-input">{{ order.zip }}</td>
-          <td class="cust-input">{{ order.email }}</td>
-          <td class="cust-input">{{ order.phone }}</td>
+          <td class="ord-input">{{ order.fname }} {{order.lname }}</td>
+          <td class="ord-input">{{ order.street }}</td>
+          <td class="ord-input">{{ order.city }}, {{ order.state }}</td>
+          <td class="ord-input">{{ order.zip }}</td>
+          <td class="ord-input">{{ order.email }}</td>
+          <td class="ord-input">{{ order.phone }}</td>
           <td><input type="submit" value="Delete" class="ui red button"></td>
           <td><input type="submit" value="Update" class="ui teal button" id="{{ order.id }}"></td>
       </tr>
@@ -60,7 +60,7 @@
     const updateorderRow = (id) => {
         var rowToUpdate = document.getElementById(id);
         
-        dataCell = rowToUpdate.getElementsByClassName('cust-input');
+        dataCell = rowToUpdate.getElementsByClassName('ord-input');
 
         for(var i = 0; i < dataCell.length; i++){
             input = document.createElement('input');
