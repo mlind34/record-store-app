@@ -68,5 +68,10 @@
 
 #addBtn {
     margin: 0% 0% 0% 10%;
-    background-color: #82a7d8;
+    color: black;
+}
+
+
+.field {
+    width: 30%;
 }

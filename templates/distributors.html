@@ -10,7 +10,6 @@
 <table class="ui striped table distributor-table" id="distributorTable">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Name</th>
         <th>Street Address</th>
         <th>City, State</th>
@@ -24,14 +23,13 @@
 
         {% for distributor in distributors %}
       <tr id="{{ distributor.id }}">
-          <td class="dist-input">{{ distributor.id }}</td>
           <td class="dist-input">{{ distributor.name }}</td>
           <td class="dist-input">{{ distributor.street }}</td>
           <td class="dist-input">{{ distributor.city }}, {{ distributor.state }}</td>
           <td class="dist-input">{{ distributor.zip }}</td>
           <td class="dist-input">{{ distributor.phone }}</td>
-          <td><input type="submit" value="Delete"></td>
-          <td><input type="submit" value="Update" id="{{ distributor.id }}"></td>
+          <td><input type="submit" value="Delete" class="ui red button"></td>
+          <td><input type="submit" value="Update" class="ui teal button" id="{{ distributor.id }}"></td>
       </tr>
       {% endfor %}
 
@@ -45,12 +43,12 @@
             let target = event.target;
             if(target.value == 'Update'){
                 var confirm = makeConfirm(target)
-                updateRow(target.id);
+                updateDistRow(target.id);
             }
         });
     
     
-        const updateRow = (id) => {
+        const updateDistRow = (id) => {
             var rowToUpdate = document.getElementById(id);
             
             dataCell = rowToUpdate.getElementsByClassName('dist-input');
@@ -75,6 +73,7 @@
             button.style.backgroundColor = 'rgb(100, 150, 240)'
             return button;
         }
+
       </script>
 
 {% endblock %}
