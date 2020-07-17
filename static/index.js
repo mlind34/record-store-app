@@ -1,13 +1,13 @@
-const customerTable = document.getElementById('customerTable');
+// const customerTable = document.getElementById('customerTable');
 
 
-customerTable.addEventListener('click', function(){
-    let target = event.target;
-    if(target.value == 'Update'){
-        var confirm = makeConfirm(target)
-        updateRow(target.id);
-    }
-});
+// customerTable.addEventListener('click', function(){
+//     let target = event.target;
+//     if(target.value == 'Update'){
+//         var confirm = makeConfirm(target)
+//         updateRow(target.id);
+//     }
+// });
 
 
 const updateRow = (id) => {

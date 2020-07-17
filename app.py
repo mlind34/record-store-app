@@ -86,22 +86,44 @@ def show_distributor():
 @app.route('/distributors/add-distributor')
 def add_distributor():
 
-    return render_template('adddistributor.html')
+    return render_template('addistributor.html')
 
 
 
 
-@app.route('/products')
-def show_inventory():
-<<<<<<< HEAD
+@app.route('/records')
+def show_records():
+    records = [{
+        'id': 200,
+        'price': 'Record Warehouse',
+        'quantity': '456 Dist Street',
+        'year': 'Los Angeles',
+        'artist': 'California',
+        'type': '78259',
+        'name': '(888) 703-6517'
+        },
+        {
+        'id': 201,
+        'price': 'Record Warehouse',
+        'quantity': '456 Dist Street',
+        'year': 'Los Angeles',
+        'artist': 'California',
+        'type': '78259',
+        'name': '(888) 703-6517'
+        },
+        {
+        'id': 201,
+        'price': 'Record Warehouse',
+        'quantity': '456 Dist Street',
+        'year': 'Los Angeles',
+        'artist': 'California',
+        'type': '78259',
+        'name': '(888) 703-6517'
+        },
+    ]
+    return render_template('records.html', records = records)
 
-    return render_template('inventory.html')
-=======
-    
-    return render_template('products.html')
+@app.route('/records/add-record')
+def add_record():
 
-@app.route('/products/add-product')
-def add_inventory():
-    
-    return render_template('products.html')
->>>>>>> 0a56414cc8ef9f95553209d36002892aee948b8f
+    return render_template('addrecord.html')
