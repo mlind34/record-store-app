@@ -1,11 +1,13 @@
 /* Home Page Title Text */
 #title {
     text-align: center;
-    padding-top: 10%;
-    padding-right: 30%;
-    color: rgb(233,229,241);
+    padding-top: 14%;
+    color: rgb(243, 242, 235);
     text-transform: uppercase;
     font-size: 3.5rem;
+    font-family: 'Bebas Neue', cursive;
+    letter-spacing: 7px;
+    font-size: 95px;
 }
 
 .ui.search {
@@ -25,9 +27,18 @@
 
 /* Navigation Bar */
 .ui.menu {
+    position: sticky;
     border-radius: 0px;
-    background-color: #c5c8cc;
+    background-color: rgb(243, 242, 235);
     margin: 0;
+    height: 7%;
+}
+
+.nav-scroll {
+    position: relative;
+    background-color: black;
+    height: 5%;
+
 }
 
 /* State Dropdown */
@@ -42,26 +53,84 @@
             rgba(0, 0, 0, 0.6),
             rgba(0, 0, 0, 0.6)
         ),
-        url(https://images.unsplash.com/photo-1582751836565-74f64cc184cb?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=mick-haupt-CbNBjnXXhNg-unsplash.jpg);
+        url(https://images.unsplash.com/photo-1569369474757-e79d23bb1a2e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=lance-anderson-EQxATL-40iY-unsplash.jpg);
         background-size: cover;
         height: 100vh;
         
 }
 
-/* Customer Page Header */
-#tableTitle {
-    text-align: center;
+.customer-header {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+        ),
+        url(https://images.unsplash.com/photo-1502240868472-18259bc0f863?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=anthony-martino-6AtQNsjMoJo-unsplash.jpg);
+        background-size: cover;
+        height: 100vh;
+        
 }
 
-.button-wrapper {
-    text-align: center;
-    margin-top: 20%;
+.record-header {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+        ),
+        url(https://images.unsplash.com/photo-1511735111819-9a3f7709049c?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=natalie-cardona-W8BRzoUTHNA-unsplash.jpg);
+        background-size: cover;
+        height: 100vh;
 }
 
-/* Home Page Buttons */
+.dist-header {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+        ),
+        url(https://images.unsplash.com/photo-1461360228754-6e81c478b882?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=mr-cup-fabien-barral-o6GEPQXnqMY-unsplash.jpg);
+        background-size: cover;
+        height: 100vh;
+}
+
+/* MAIN VIEW PAGE TITLES */
+#viewTitle {
+    text-align: center;
+    color: rgb(233,229,241);
+    padding-top: 5%;
+}
+
+/* OTHER PAGE TITLES  */
+#genericTitle {
+    text-align: center;
+    color: black;
+    padding-top: 5%;
+}
+
+.home-button-wrapper {
+    text-align: center;
+    margin-top: 10%;
+}
+
+
+.btn-wrapper {
+    display: flex;
+}
+
+/* ADD BUTTON */
+.add-btn {
+    margin-left: 10%;
+}
+
+
+/* VIEW BUTTON */
+.view-btn {
+    margin-left: 54%;
+}
+
+
+/* ADD/VIEW BUTTONS */
 .ui.big.button {
-    margin: 5%;
-    width: 20%;
     background-color: #c5c8cc;
 }
 
@@ -71,12 +140,15 @@
 }
 
 
-#addBtn {
-    margin: 0% 0% 0% 10%;
-    color: black;
-}
-
 
 .field {
     width: 30%;
+}
+
+
+/* HOMEPAGE BUTTONS */
+.ui.big.button.home {
+    width: 20%;
+    margin: 0% 5%;
+    background-color: rgb(243, 242, 235);
 }

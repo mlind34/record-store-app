@@ -1,14 +1,21 @@
 from flask import Flask, render_template, request, jsonify, make_response
 app = Flask(__name__)
 
+# 
+# VIEWS
+# 
+
+# INDEX 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+# HOME
 @app.route('/home')
 def home():
     return render_template('home.html')
 
+# CUSTOMERS
 @app.route('/customers', methods=['GET'])
 def show_customer():
     customers = [{
@@ -46,14 +53,10 @@ def show_customer():
         }
     ]
 
-    return render_template('customers.html', customers=customers, title='Customers')
-    
-
-@app.route('/customers/add-customer')
-def add_customer():
-    return render_template('addcustomer.html', title='Add Customer')
+    return render_template('views.html', customers=customers, title='Customers')
 
 
+# DISTRIBUTORS
 @app.route('/distributors')
 def show_distributor():
 
@@ -68,67 +71,58 @@ def show_distributor():
         },
         {
         'id': 201,
-        'name': 'Record Warehouse',
-        'street': '456 Dist Street',
-        'city': 'Los Angeles',
-        'state': 'California',
-        'zip': '78259',
-        'phone': '(888) 703-6517'
+        'name': 'Records R Us',
+        'street': '123 Pike St',
+        'city': 'Seattle',
+        'state': 'washington',
+        'zip': '98256',
+        'phone': '(206) 712-3449'
         },
         {
         'id': 202,
-        'name': 'Record Warehouse',
-        'street': '456 Dist Street',
-        'city': 'Los Angeles',
-        'state': 'California',
-        'zip': '78259',
-        'phone': '(888) 703-6517'
+        'name': 'House of Vinyl',
+        'street': '789 Stock Pl',
+        'city': 'Austin',
+        'state': 'Texas',
+        'zip': '76782',
+        'phone': '(800) 178-3789'
         },
     ]
-    return render_template('distributors.html', distributors=distributors, title='Distributors')
-
-@app.route('/distributors/add-distributor')
-def add_distributor():
-
-    return render_template('addistributor.html', title='Add Distributor')
+    return render_template('views.html', distributors=distributors, title='Distributors')
 
 
-
+# RECORDS 
 @app.route('/records')
 def show_records():
     records = [{
-        'id': 200,
-        'price': '20',
-        'quantity': '12',
-        'year': '1985',
-        'artist': 'John Smith',
-        'name': "John's Best"
-        },
-        {
-        'id': 201,
+        'id': 500,
         'price': '40',
-        'quantity': '8',
-        'year': '1958',
-        'artist': 'George JSON',
-        'name': 'String Theory'
+        'quantity': '5',
+        'year': '1970',
+        'artist': 'The Beatles',
+        'name': "Let It Be"
         },
         {
-        'id': 201,
+        'id': 501,
+        'price': '18',
+        'quantity': '2',
+        'year': '1973',
+        'artist': 'Black Sabbath',
+        'name': 'Sabbath Bloody Sabbath'
+        },
+        {
+        'id': 701,
         'price': '28',
-        'quantity': '26',
-        'year': '2001',
-        'artist': 'Foo',
-        'name': 'Bar'
+        'quantity': '3',
+        'year': '1968',
+        'artist': 'Aretha Franklin',
+        'name': 'Aretha Now'
         },
     ]
-    return render_template('records.html', records = records, title='Records')
-
-@app.route('/records/add-record')
-def add_record():
-
-    return render_template('addrecord.html')
+    return render_template('views.html', records = records, title='Records')
 
 
+# PURCHASES
 @app.route('/purchases')
 def view_purchases():
     purchases = [
@@ -154,15 +148,63 @@ def view_purchases():
             'totalPrice': 5.67 
         }
     ]
-    return render_template('purchases.html', purchases=purchases, title='Purchases')
+    return render_template('views.html', purchases=purchases, title='Purchases')
 
 
+# ORDERS
+@app.route('/orders')
+def view_orders():
+    orders = [
+        {
+            'order_num': 2018785,
+            'order_date': '10-13-2016',
+            'filled': True
+        },
+        {
+            'order_num': 2015678,
+            'order_date': '02-05-2019',
+            'filled': False
+        }
+    ]
+
+    return render_template('views.html', title='Orders', orders=orders)
+
+
+
+# 
+# FORMS
+# 
+
+
+
+
+# ADD CUSTOMER
+@app.route('/customers/add-customer')
+def add_customer():
+    return render_template('forms.html', title='Add Customer')
+    
+
+# ADD DISTRIBUTOR
+@app.route('/distributors/add-distributor')
+def add_distributor():
+
+    return render_template('forms.html', title='Add Distributor')
+
+# ADD PURCHASE
 @app.route('/purchases/add-purchase')
 def add_purchase():
 
-    return render_template('addpurchase.html', title='Add Purchase')
+    return render_template('forms.html', title='Add Purchase')
 
 
-@app.route('/orders')
-def view_orders():
-    return render_template('orders.html', title='Orders')
+# ADD RECORDS
+@app.route('/records/add-record')
+def add_record():
+
+    return render_template('forms.html', title='Add Record')
+
+# ADD ORDER
+@app.route('/orders/add-order')
+def add_order():
+
+    return render_template('forms.html', title='Add Order')

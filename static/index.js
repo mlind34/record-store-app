@@ -1,41 +1,57 @@
-// const customerTable = document.getElementById('customerTable');
+const dataTable = document.getElementById('dataTable');
 
 
-// customerTable.addEventListener('click', function(){
-//     let target = event.target;
-//     if(target.value == 'Update'){
-//         var confirm = makeConfirm(target)
-//         updateRow(target.id);
+dataTable.addEventListener('click', function(){
+    let target = event.target;
+    if(target.value == 'Update'){
+        var confirm = makeConfirm(target)
+        updateRow(target.id);
+    }
+});
+
+
+const updateRow = (id) => {
+    var rowToUpdate = document.getElementById(id);
+    
+    dataCell = rowToUpdate.getElementsByClassName('table-input');
+
+    for(var i = 0; i < dataCell.length; i++){
+        input = document.createElement('input');
+
+        input.setAttribute('type', 'text');
+
+        input.setAttribute('size', '17')
+
+        input.setAttribute('value', dataCell[i].innerHTML)
+
+        dataCell[i].innerHTML = '';
+
+        dataCell[i].append(input);
+    }
+}
+
+
+const makeConfirm = (button) => {
+    button.setAttribute('value', 'Confirm');
+    button.style.backgroundColor = 'rgb(100, 150, 240)'
+    return button;
+}
+
+
+// STICKY NAV SCROLL FUNCTION
+// document.addEventListener('scroll', function(){
+//     var scroll = window.scrollY;
+//     var header = document.getElementById("navbar");
+//     if(scroll >= 1){
+//         header.classList.remove("nav-scroll");
+//         header.classList.add(".i.menu");
+//     } else {
+//         header.classList.remove(".ui.menu");
+//         header.classList.add("nav-scroll");
 //     }
 // });
 
 
-// const updateRow = (id) => {
-//     var rowToUpdate = document.getElementById(id);
-    
-//     dataCell = rowToUpdate.getElementsByClassName('table-input');
-
-//     for(var i = 0; i < dataCell.length; i++){
-//         input = document.createElement('input');
-
-//         input.setAttribute('type', 'text');
-
-//         input.setAttribute('size', '17')
-
-//         input.setAttribute('value', dataCell[i].innerHTML)
-
-//         dataCell[i].innerHTML = '';
-
-//         dataCell[i].append(input);
-//     }
-// }
-
-
-// const makeConfirm = (button) => {
-//     button.setAttribute('value', 'Confirm');
-//     button.style.backgroundColor = 'rgb(100, 150, 240)'
-//     return button;
-// }
 
 
 // fetch('http://flip2.engr.oregonstate.edu:4521/customers')

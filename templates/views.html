@@ -1,0 +1,254 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- CUSTOMERS VIEW -->
+{% if customers %}
+
+<div class="customer-header">
+    <h1 id="viewTitle">Customers</h1>
+
+    <div class="btn-wrapper">
+        <div class="add-btn">
+            <form action="/customers/add-customer">
+                <input type="submit" class="big ui primary button" value="Add Customer">
+            </form>
+        </div>
+
+        <div class="view-btn">
+            <form action="/purchases">
+                <input type="submit" class="big ui primary button" value="View All Purchases">
+            </form>
+        </div>
+    </div>
+
+    <table class="ui striped table" id="dataTable">
+        <thead>
+        <tr>
+            
+            <th>Name</th>
+            <th>Street Address</th>
+            <th>City, State</th>
+            <th>Zip Code</th>
+            <th>E-mail address</th>
+            <th>Phone Number</th>
+            <th>Delete</th>
+            <th>Update</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+        {% for customer in customers %}
+
+        <tr id="{{ customer.id }}">
+            
+            <td class="table-input">{{ customer.fname }} {{customer.lname }}</td>
+            <td class="table-input">{{ customer.street }}</td>
+            <td class="table-input">{{ customer.city }}, {{ customer.state }}</td>
+            <td class="table-input">{{ customer.zip }}</td>
+            <td class="table-input">{{ customer.email }}</td>
+            <td class="table-input">{{ customer.phone }}</td>
+            <td><input type="submit" value="Delete" class="ui red button"></td>
+            <td><input type="submit" value="Update" class="ui teal button" id="{{ customer.id }}"></td>
+        </tr>
+
+        {% endfor %}
+        
+        
+        </tbody>
+        
+    </table>
+  </div>
+
+<!-- DISTRIBUTORS VIEW -->
+{% elif distributors %}
+<div class="dist-header">
+        <h1 id="viewTitle">Distributors</h1>
+
+        <div class="btn-wrapper">
+            <div class="add-btn">
+                <form action="/distributors/add-distributor">
+                    <input type="submit" class="big ui primary button" value="Add Distributor">
+                </form>
+            </div>
+    
+            <div class="view-btn">
+                <form action="/orders">
+                    <input type="submit" class="big ui primary button" value="View Orders">
+                </form>
+            </div>
+        </div>
+
+        <table class="ui striped table distributor-table" id="dataTable">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Street Address</th>
+                <th>City, State</th>
+                <th>Zip Code</th>
+                <th>Phone Number</th>
+                <th>Delete</th>
+                <th>Update</th>
+            </tr>
+            </thead>
+            <tbody>
+
+                {% for distributor in distributors %}
+            <tr id="{{ distributor.id }}">
+                <td class="table-input">{{ distributor.name }}</td>
+                <td class="table-input">{{ distributor.street }}</td>
+                <td class="table-input">{{ distributor.city }}, {{ distributor.state }}</td>
+                <td class="table-input">{{ distributor.zip }}</td>
+                <td class="table-input">{{ distributor.phone }}</td>
+                <td><input type="submit" value="Delete" class="ui red button"></td>
+                <td><input type="submit" value="Update" class="ui teal button" id="{{ distributor.id }}"></td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>    
+      </div>
+
+<!-- RECORDS VIEW -->
+{% elif records %}
+
+<div class="record-header">
+
+<h1 id="viewTitle">Records</h1>
+
+<div class="btn-wrapper">
+    <div class="add-btn">
+        <form action="/records/add-record">
+            <input type="submit" class="big ui primary button" value="Add Record">
+        </form>
+    </div>
+</div>
+
+<div class="ui search">
+  <input class="prompt" type="text" placeholder="Search our inventory..." style="width: 30%;">
+  <div class="results"></div>
+</div>
+
+<table class="ui striped table" id="dataTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Year</th>
+        <th>Artist</th>
+        <th>Name</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for record in records %}
+      <tr id="{{ record.id }}">
+          <td class="table-input">{{ record.id }}</td>
+          <td class="table-input">${{ record.price }}</td>
+          <td class="table-input">{{ record.quantity }}</td>
+          <td class="table-input">{{ record.year }}</td>
+          <td class="table-input">{{ record.artist }}</td>
+          <td class="table-input">{{ record.name }}</td>
+          <td><input class="ui red button" type="submit" value="Delete"></td>
+          <td><input class="ui teal button" type="submit" value="Update" id="{{ record.id }}"></td>
+      </tr>
+      {% endfor %}
+      
+    </tbody>
+      
+  </table>
+</div>
+
+
+<!-- PURCHASES VIEW -->
+  {% elif purchases %}
+  <h1 id="genericTitle">Purchases</h1>
+
+  <div class="btn-wrapper">
+        <div class="add-btn">
+            <form action="/customers/add-customer">
+                <input type="submit" class="big ui primary button" value="Add Purchase">
+            </form>
+        </div>  
+    </div>
+
+<table class="ui striped table purchases-table" id="dataTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Method</th>
+        <th>Payment Confirmation</th>
+        <th>Total</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for purchase in purchases %}
+      <tr id="{{ purchase.id }}">
+          <td class="table-input">{{ purchase.purchaseDate }}</td>
+          <td class="table-input">{{ purchase.paymentMethod }}</td>
+            {% if purchase.paid == True %}
+          <td class="table-input">Confirmed</td>
+            {% else %}
+            <td class="table-input">Missing Payment</td>
+            {% endif %}
+          <td class="table-input">{{ purchase.totalPrice }}</td>
+          <td><input type="submit" value="Delete" class="ui red button"></td>
+          <td><input type="submit" value="Update" class="ui teal button" id="{{ purchase.id }}"></td>
+      </tr>
+      {% endfor %}
+      
+      
+    </tbody>
+      
+  </table>
+
+  <!-- ORDERS VIEW -->
+  {% elif orders %}
+  <h1 id="genericTitle">Orders</h1>
+
+  <div class="btn-wrapper">
+    <div class="add-btn">
+        <form action="/orders/add-order">
+            <input type="submit" class="big ui primary button" value="Add Order">
+        </form>
+    </div>
+</div>
+
+<table class="ui striped table order-table" id="orderTable">
+    <thead>
+      <tr>
+        <th>Order Number</th>
+        <th>Order Date</th>
+        <th>Order Filled</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for order in orders %}
+      <tr id="{{ order.id }}">
+          
+          <td>{{ order.order_num }}</td>
+          <td class="ord-input">{{ order.order_date }}</td>
+          {% if order.filled == True %}
+            <td class="positive"><i class="icon checkmark"></i>Order Complete</td>
+            {% else %}
+            <td class="negative">Incomplete Order (Call vendor)</td>
+          {% endif %}
+          
+      </tr>
+      {% endfor %}
+      
+      
+    </tbody>
+      
+  </table>
+
+
+{% endif %}
+
+{% endblock %}

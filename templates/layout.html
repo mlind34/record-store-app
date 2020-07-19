@@ -6,6 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     
     {% if title %}
         <title>Groovie's - {{ title }}</title>
@@ -15,9 +16,9 @@
 
 </head>
 <body>
-    <div class="ui menu">
+    <div class="ui menu" id="navbar">
         
-          <a class="active item" href="/">
+          <a class="active item" href="/home">
             Home
           </a>
           <div class="right menu">
