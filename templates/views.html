@@ -131,7 +131,6 @@
 <table class="ui striped table" id="dataTable">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Price</th>
         <th>Quantity</th>
         <th>Year</th>
@@ -145,7 +144,6 @@
       
       {% for record in records %}
       <tr id="{{ record.id }}">
-          <td class="table-input">{{ record.id }}</td>
           <td class="table-input">${{ record.price }}</td>
           <td class="table-input">{{ record.quantity }}</td>
           <td class="table-input">{{ record.year }}</td>
@@ -168,7 +166,7 @@
 
   <div class="btn-wrapper">
         <div class="add-btn">
-            <form action="/customers/add-customer">
+            <form action="/purchases/add-purchase">
                 <input type="submit" class="big ui primary button" value="Add Purchase">
             </form>
         </div>  

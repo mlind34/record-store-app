@@ -146,6 +146,12 @@
 }
 
 
+/* Add Purchase Radio buttons */
+.methodRadios {
+    margin-right: 20%;
+}
+
+
 /* HOMEPAGE BUTTONS */
 .ui.big.button.home {
     width: 20%;

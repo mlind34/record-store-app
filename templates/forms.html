@@ -241,6 +241,44 @@
     </form>
 </div>
 
+<!-- ADD PURCHASE FORM -->
+{% elif title == 'Add Purchase' %}
+
+<div class="ui container">
+    <form class="ui form">
+        <h3 class="ui dividing header">Add Purchase</h3>
+        
+            <div class="field">
+                    <label>Purchase Date</label>
+                    <input type="date" name="purchasedate" placeholder="mm/dd/yyyy">
+            </div>
+           
+            <div class="field">
+                <label>Method</label>
+                <div class="methodRadios">
+                    <label>Card</label>
+                    <input type="radio" name="method" value="card" style="margin-right: 5%;">
+                    <label>Cash</label>
+                    <input type="radio" name="method" value="cash">
+                </div>
+            </div>
+
+        
+            <div class="ui toggle checkbox" style="margin: 20px 0px;">
+                <input type="checkbox" name="public">
+                <label>Payment Confirmed?</label>
+              </div>
+            
+        
+    
+               
+            
+            <div class="field">
+                <button class="ui primary button" type="submit">Submit</button>
+            </div>
+    </form>
+</div>
+
 <!-- ADD ORDER FORM -->
 {% elif title == 'Add Order' %}
 
