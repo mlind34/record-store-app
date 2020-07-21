@@ -100,7 +100,8 @@ def show_records():
         'quantity': '5',
         'year': '1970',
         'artist': 'The Beatles',
-        'name': "Let It Be"
+        'name': "Let It Be",
+        'distributor': "Record Warehouse"
         },
         {
         'id': 501,
@@ -108,7 +109,8 @@ def show_records():
         'quantity': '2',
         'year': '1973',
         'artist': 'Black Sabbath',
-        'name': 'Sabbath Bloody Sabbath'
+        'name': 'Sabbath Bloody Sabbath',
+        'distributor': "Records R Us"
         },
         {
         'id': 701,
@@ -116,7 +118,8 @@ def show_records():
         'quantity': '3',
         'year': '1968',
         'artist': 'Aretha Franklin',
-        'name': 'Aretha Now'
+        'name': 'Aretha Now',
+        'distributor': "NULL"
         },
     ]
     return render_template('views.html', records = records, title='Records')
