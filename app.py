@@ -156,12 +156,12 @@ def view_purchases():
 def view_orders():
     orders = [
         {
-            'order_num': 2018785,
+            'order_id': 2018785,
             'order_date': '10-13-2016',
             'filled': True
         },
         {
-            'order_num': 2015678,
+            'order_id': 2015678,
             'order_date': '02-05-2019',
             'filled': False
         }

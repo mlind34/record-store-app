@@ -15,19 +15,34 @@ const updateRow = (id) => {
     
     dataCell = rowToUpdate.getElementsByClassName('table-input');
 
+    checkCell = rowToUpdate.getElementsByClassName('ui checkbox');
+
     for(var i = 0; i < dataCell.length; i++){
+  
         input = document.createElement('input');
 
         input.setAttribute('type', 'text');
 
         input.setAttribute('size', '17')
 
-        input.setAttribute('value', dataCell[i].innerHTML)
+        input.setAttribute('value', dataCell[i].innerText)
 
         dataCell[i].innerHTML = '';
 
         dataCell[i].append(input);
+       
     }
+
+    // checkInput = document.createElement('input');
+    // input.setAttribute('type', 'checkbox');
+    // console.log(input)
+    // if(checkCell.checked == True){
+    //     input.setAttribute('checked', 'True')
+    // } else {
+    //     input.setAttribute('checked', 'False')
+    // }
+    // checkCell = input
+
 }
 
 
