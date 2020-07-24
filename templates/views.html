@@ -35,6 +35,7 @@
             <th>Phone Number</th>
             <th>Delete</th>
             <th>Update</th>
+            <th>Purchases</th>
         </tr>
         </thead>
         <tbody>
@@ -53,6 +54,8 @@
             <td class="table-input">{{ customer.phone }}</td>
             <td><input type="submit" value="Delete" class="ui red button"></td>
             <td><input type="submit" value="Update" class="ui teal button" id="{{ customer.id }}"></td>
+            <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer.id }}"></td>
+
         </tr>
 
         {% endfor %}
@@ -128,7 +131,7 @@
 </div>
 
 <div class="ui search">
-  <input class="prompt" type="text" placeholder="Search our inventory..." style="width: 30%;">
+  <input class="prompt" type="text" placeholder="Search inventory..." style="width: 30%;">
   <div class="results"></div>
 </div>
 
@@ -193,6 +196,7 @@
       
       {% for purchase in purchases %}
       <tr id="{{ purchase.id }}">
+
           <td class="table-input">{{ purchase.purchaseDate }}</td>
           <td class="table-input">{{ purchase.paymentMethod }}</td>
             {% if purchase.paid == True %}
@@ -238,14 +242,20 @@
     <tbody>
       
       {% for order in orders %}
-      <tr id="{{ order.id }}">
+      <tr id="{{ order.order_id }}">
           
-          <td>{{ order.order_num }}</td>
-          <td class="ord-input">{{ order.order_date }}</td>
+          <td class="table-input">{{ order.order_id }}</td>
+          <td class="table-input">{{ order.order_date }}</td>
           {% if order.filled == True %}
-            <td class="positive"><i class="icon checkmark"></i>Order Complete</td>
+          <td class="ui checkbox">
+            <input type="checkbox" name="public" checked='True'>
+            <label></label>
+          </td>
             {% else %}
-            <td class="negative">Incomplete Order (Call vendor)</td>
+            <td class="ui checkbox">
+              <input type="checkbox" name="public">
+              <label></label>
+            </td>
           {% endif %}
           <td><input type="submit" value="Add Item" class="ui teal button" id="{{ order.id }}" onlick="orderAdd()"></td>
           <td><input type="submit" value="View Items" class="ui teal button" id="{{ order.id }}"></td>
