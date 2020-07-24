@@ -33,6 +33,7 @@
             <th>Phone Number</th>
             <th>Delete</th>
             <th>Update</th>
+            <th>Purchases</th>
         </tr>
         </thead>
         <tbody>
@@ -49,6 +50,8 @@
             <td class="table-input">{{ customer.phone }}</td>
             <td><input type="submit" value="Delete" class="ui red button"></td>
             <td><input type="submit" value="Update" class="ui teal button" id="{{ customer.id }}"></td>
+            <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer.id }}"></td>
+
         </tr>
 
         {% endfor %}
@@ -124,7 +127,7 @@
 </div>
 
 <div class="ui search">
-  <input class="prompt" type="text" placeholder="Search our inventory..." style="width: 30%;">
+  <input class="prompt" type="text" placeholder="Search inventory..." style="width: 30%;">
   <div class="results"></div>
 </div>
 
@@ -180,15 +183,15 @@
         <th>Date</th>
         <th>Method</th>
         <th>Payment Confirmation</th>
-        <th>Total</th>
-        <th>Delete</th>
-        <th>Update</th>
+        <th>Total</th>      
+        
       </tr>
     </thead>
     <tbody>
       
       {% for purchase in purchases %}
       <tr id="{{ purchase.id }}">
+
           <td class="table-input">{{ purchase.purchaseDate }}</td>
           <td class="table-input">{{ purchase.paymentMethod }}</td>
             {% if purchase.paid == True %}
@@ -197,8 +200,7 @@
             <td class="table-input">Missing Payment</td>
             {% endif %}
           <td class="table-input">{{ purchase.totalPrice }}</td>
-          <td><input type="submit" value="Delete" class="ui red button"></td>
-          <td><input type="submit" value="Update" class="ui teal button" id="{{ purchase.id }}"></td>
+          
       </tr>
       {% endfor %}
       

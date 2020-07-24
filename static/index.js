@@ -77,6 +77,8 @@ const makeConfirm = (button) => {
 //         console.log(text); // Print the greeting as text
 //     });
 
+
+
 // // Send the same request
 // fetch('http://flip2.engr.oregonstate.edu:4521/customers')
 //     .then(function (response) {
