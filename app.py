@@ -211,3 +211,12 @@ def add_record():
 def add_order():
 
     return render_template('forms.html', title='Add Order')
+
+
+
+# Javascript Routes
+
+@app.route('/delete')
+def delete_entry():
+
+     return render_template('forms.html', title='Add Order')
