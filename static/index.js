@@ -1,7 +1,22 @@
-const dataTable = document.getElementById('dataTable');
+let dataTable = document.getElementById('dataTable');
+console.log(dataTable);
+let buttons = document.getElementsByTagName("input");
+console.log(buttons);
 
-
-dataTable.addEventListener('click', function(){
+for(let i in buttons) {
+//   if(buttons[i].value === 'Delete') {
+//       buttons[i].addEventListener("click", (event) => {
+//             fetch('http://flip2.engr.oregonstate.edu:4521/delete')
+//                 .then(function (response) {
+//                     return response.text();
+//                 }).then(function (text) {
+//                      console.log('GET response text:');
+//                     console.log(text); // Print the greeting as text
+//                 });
+//       })
+//   }
+}
+dataTable.addEventListener('click', (event) =>{
     let target = event.target;
     if(target.value == 'Update'){
         var confirm = makeConfirm(target)
@@ -51,6 +66,8 @@ const makeConfirm = (button) => {
     button.style.backgroundColor = 'rgb(100, 150, 240)'
     return button;
 }
+
+
 
 
 // STICKY NAV SCROLL FUNCTION
