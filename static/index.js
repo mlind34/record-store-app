@@ -16,6 +16,8 @@ for(let i in buttons) {
 //       })
 //   }
 }
+
+
 dataTable.addEventListener('click', (event) =>{
     let target = event.target;
     if(target.value == 'Update'){

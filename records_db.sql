@@ -51,6 +51,8 @@ CREATE TABLE `distributors` (
   PRIMARY KEY (`distributorID`)
 ) ENGINE=InnoDB;
 
+
+
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `orderID` int NOT NULL AUTO_INCREMENT,
