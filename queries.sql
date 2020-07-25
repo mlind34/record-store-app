@@ -3,7 +3,7 @@
 -- 
 
 -- displays customer data in table 
-SELECT firstName, lastName, city, state, zip, phone, email FROM customers;
+SELECT firstName, lastName, street, city, state, zip, phone, email FROM customers;
 
 -- deletes customer from customers table
 DELETE FROM customers WHERE customerID = :delete button associated with customer row
@@ -12,7 +12,7 @@ DELETE FROM customers WHERE customerID = :delete button associated with customer
 UPDATE customers SET firstName = :firstName_input, lastName = :lastName_input, street = :street_input city = :city_input, state = :state_input, zip = :zip_input, phone = :phone_input, email = :email_input;
 
 -- view customers purchases
-SELECT date, paymentMethod, totalPrice FROM purchases WHERE customerID = :id associated with row
+SELECT purchasedate, paymentMethod, totalPrice FROM purchases WHERE customerID = :id associated with row
 
 -- ADD CUSTOMER PAGE
 -- adds a customer
@@ -62,7 +62,7 @@ SELECT orderDate, orderFilled, distributor FROM orders;
 
 
 -- updates whether an order is filled or not
-UPDATE orders SET orderFilled = :filled_checkbox
+UPDATE orders SET orderFilled = :filled_checkbox;
 
 
 -- ADD ORDER PAGE
@@ -74,7 +74,7 @@ INSERT INTO orders (distributorID, orderDate, orderFilled, distributor)
 -- PURCHASES PAGE
 -- 
 -- displays all purchases
-SELECT date, paymentMethod, totalPrice FROM purchases
+SELECT purchaseDate, paymentMethod, totalPrice FROM purchases;
 
 -- ADD PURCHASE PAGE
 INSERT INTO purchases (customerID, paymentMethod, totalPrice)
