@@ -1,20 +1,39 @@
 let dataTable = document.getElementById('dataTable');
 console.log(dataTable);
-let buttons = document.getElementsByTagName("input");
+let buttons = dataTable.querySelectorAll('input');
 console.log(buttons);
 
 for(let i in buttons) {
-//   if(buttons[i].value === 'Delete') {
-//       buttons[i].addEventListener("click", (event) => {
-//             fetch('http://flip2.engr.oregonstate.edu:4521/delete')
-//                 .then(function (response) {
-//                     return response.text();
-//                 }).then(function (text) {
-//                      console.log('GET response text:');
-//                     console.log(text); // Print the greeting as text
-//                 });
-//       })
-//   }
+
+  if(buttons[i].value == 'Purchases') {
+    //   let data = {
+    //     id: buttons[i].id
+    //   };
+      //contextJson = JSON.stringify(context);
+      buttons[i].addEventListener("click", (event) => {
+        // let subReq = new XMLHttpRequest();
+        // subReq.open("POST", "http://flip3.engr.oregonstate.edu:5199/custpurchases", true);
+        // subReq.setRequestHeader("content-type", "application/json");
+        // subReq.addEventListener("load", () => {
+        //     document.querySelector('html').innerHTML = subReq.response;
+        // })
+        // data = JSON.stringify(data);
+        // subReq.send(data);
+        // event.preventDefault();
+        window.location.href = '/custpurchases/'+buttons[i].id
+
+        // fetch('http://flip3.engr.oregonstate.edu:5199/custpurchases', {
+        //     method: 'POST',
+        //     mode: 'cors',
+        //     headers: {
+        //         'content-type': 'application/json'
+        //     },
+        //     body: contextJson,
+        // }).then(function (response) {
+        //     console.log(response);
+        // })
+      })
+  }
 }
 dataTable.addEventListener('click', (event) =>{
     let target = event.target;
