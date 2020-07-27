@@ -42,7 +42,7 @@
         
         {% for customer in customers %}
 
-        <tr id="{{ customer.id }}">
+        <tr id="{{ customer['customerID'] }}">
             
             <td class="table-input">{{ customer['firstName'] }}</td>
             <td class="table-input">{{customer['lastName'] }}</td>
@@ -52,9 +52,9 @@
             <td class="table-input">{{ customer['zip'] }}</td>
             <td class="table-input">{{ customer['email'] }}</td>
             <td class="table-input">{{ customer['phone'] }}</td>
-            <td><input type="submit" value="Delete" class="ui red button"></td>
-            <td><input type="submit" value="Update" class="ui teal button" id="{{ customer.id }}"></td>
-            <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer.id }}"></td>
+            <td><input type="submit" value="Delete" class="ui red button" id="{{ customer['customerID'] }}"></td>
+            <td><input type="submit" value="Update" class="ui teal button" id="{{ customer['customerID'] }}"></td>
+            <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer['customerID'] }}"></td>
 
         </tr>
 
@@ -278,8 +278,8 @@
       
   </table>
 
-  {% elif cust_purchases %}
-  <h1 id="genericTitle">Purchases</h1>
+  {% elif custpurchase %}
+  <h1 id="genericTitle">{{title}}</h1>
 
   <div class="btn-wrapper">
         <div class="add-btn">
@@ -303,8 +303,8 @@
     </thead>
     <tbody>
       
-      {% for purchase in purchases %}
-      <tr id="{{ purchase.id }}">
+      {% for purchase in custpurchase %}
+      <tr id="{{ custpurchase['id'] }}">
 
           <td class="table-input">{{ purchase['purchaseDate'] }}</td>
           <td class="table-input">{{ purchase['paymentMethod'] }}</td>

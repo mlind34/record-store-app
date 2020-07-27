@@ -4,7 +4,9 @@ import random
 from random import randint
 # import grequests
 from db_connect import connect_to_database, execute_query
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
 # 
 # VIEWS
@@ -25,7 +27,7 @@ def home():
 def show_customer():
     sql_connection = connect_to_database()
     if request.method == 'GET':
-        customers = 'SELECT firstName, lastName, street, city, state, zip, phone, email FROM customers'
+        customers = 'SELECT customerID, firstName, lastName, street, city, state, zip, phone, email FROM customers'
         customers_query = execute_query(sql_connection, customers).fetchall()
         return render_template('views.html', customers=customers_query, title='Customers')
 
@@ -73,13 +75,22 @@ def view_orders():
 
 
 # Use this or repurpose existing Purchases page for individual customer puchase SELECT
-@app.route('/custpurchases', methods=['POST', 'GET'])
-def view_cust_purchases():
+@app.route('/custpurchases/<var>', methods=['GET'])
+def view_cust_purchases(var):
+    id = var
+    print(id)
     sql_connection = connect_to_database()
-    if request.method == 'GET':
-        orders = 'SELECT orderDate, orderFilled, distributor FROM orders'
-        orders_query = execute_query(sql_connection, orders).fetchall()
-        return render_template('views.html', orders=orders_query, title='Orders')
+    purchases = 'SELECT purchaseDate, paymentMethod, totalPrice FROM purchases INNER JOIN customers ON customers.customerID = '+ id +' AND purchases.customerID = '+id
+    name = 'SELECT firstName, lastName FROM customers WHERE customers.customerID = '+id
+    purchases_query = execute_query(sql_connection, purchases).fetchall()
+    name_query = execute_query(sql_connection, name).fetchall()
+    if not purchases_query:
+        #so table header row shows up
+        purchases_query = ["noData"]
+    firstName = name_query[0]['firstName']
+    lastName = name_query[0]['lastName']
+    return render_template('views.html', custpurchase=purchases_query, title= firstName+' '+lastName+' Purchases')
+
 
 
 
@@ -212,8 +223,3 @@ def add_order():
 
 
 # Javascript Routes
-
-@app.route('/delete')
-def delete_entry():
-
-     return render_template('forms.html', title='Add Order')
