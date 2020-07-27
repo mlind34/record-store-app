@@ -106,7 +106,7 @@
 <!-- NEW DISTRIBUTOR FORM -->
 {% elif title == 'Add Distributor' %}
 <div class="ui container">
-    <form class="ui form">
+    <form class="ui form" action="/distributors/add-distributor" method="POST">
         <h3 class="ui dividing header">Distributors</h3>
         
             
@@ -129,7 +129,7 @@
         </div>
             <div class="field" id="state">
                 <label>State</label>
-                <select class="ui fluid dropdown">
+                <select class="ui fluid dropdown" name="state">
                     <option value="">State</option>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
@@ -190,6 +190,11 @@
                 <div class="field">
                     <label>Phone</label>
                     <input type="text" name="phone" placeholder="Phone">
+                </div>
+
+                <div class="field">
+                    <label>Zip</label>
+                    <input type="text" name="zip" placeholder="Zip Code">
                 </div>
             
 
@@ -274,50 +279,75 @@
                 <label>Payment Confirmed?</label>
               </div>
             
-        
-    
-               
-            
             <div class="field">
                 <button class="ui primary button" type="submit">Submit</button>
             </div>
     </form>
 </div>
 
-<!-- ADD ORDER FORM -->
-{% elif title == 'Add Order' %}
+<!-- CREATE ORDER FORM -->
+{% elif distributor_order %}
 
-<div class="ui container">
-    <form class="ui form">
-        <h3 class="ui dividing header">Add Order</h3>
-        
-            <div class="field">
-                <label>Order Number</label>
-                <input type="text" name="price" placeholder="Order #">
-            </div>
-           
-     
-            <div class="field">
-                <label>Date</label>
-                <input type="text" name="price" placeholder="Order #">
-            </div>
-        
-            <div class="ui toggle checkbox" style="margin: 20px 0px;">
-                <input type="checkbox" name="public">
-                <label>Order Filled?</label>
-              </div>
-            
-                <div class="field">
-                    <label>Total Price</label>
-                    <input type="text" name="type" placeholder="Total">
-                </div>
-               
-            
+    <h1>New Order</h1>
 
-        <button class="ui primary button" type="submit">Submit</button>
+    <label for="">Select a Distributor</label>
+    <form action="/orders/add-order" method="POST">
+        <select name="Distributor" class="ui dropdown" id="">
+            <option value="">Distributors</option>
+            {% for distributor in distributor_order %}
+            
+            <option value="{{ distributor['name'] }}">{{ distributor['name'] }}</option>
+
+            {% endfor %}
+        </select>
+        <input type="submit" value="Create Order">
     </form>
-</div>
+
+{% elif dist_inventory %}
+
+<div class="ui link cards">
+                    
+    {% for i in dist_inventory %}
+        
+    <div class="card">
+      <div class="image" id="albumImage">
+        <img src={{ i['img'] }}>
+      </div>
+      <div class="content">
+        <div class="header" id="albumTitle">{{ i['title'] }}</div>
+        <div class="meta">
+          <p id="albumYear">{{ i['year'] }}</p>
+        </div>
+        
+      </div>
+      
+      <div class="extra content">
+        <!-- <button type="submit" class="add-to-order">Add to Order</button> -->
+        
+        <span>
+          <i class="money icon"></i>
+            ${{ i['price'] }}
+            
+        </span>
   
+        <span>
+          quantity: {{ i['quantity'] }}
+        </span>
+        
+      </div>
+      
+    </div>
+
+    {% endfor %}
+
+ <!-- <script>
+    searchBtn = document.getElementById('searchBtn')
+    searchBtn.addEventListener('click', function(){
+        console.log(document.getElementById('recordSearch').value)
+    })
+    
+
+</script> -->
 
 {% endif %}
 

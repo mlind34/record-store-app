@@ -158,3 +158,23 @@
     margin: 0% 5%;
     background-color: rgb(243, 242, 235);
 }
+
+img {
+    width: 20%;
+}
+
+.ui.link.cards {
+    margin-left: 0.5%;
+    padding-top: 15%;
+}
+
+.ui.vertical.text.menu {
+    float: right;
+    margin-top: 25%;
+    margin-right: 2%;
+    width: 17%;
+}
+
+#orderTitle {
+    font-size: large;
+}

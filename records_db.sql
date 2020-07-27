@@ -64,6 +64,20 @@ CREATE TABLE `orders` (
   CONSTRAINT `distributor_ibfk_1` FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `distInventory`;
+CREATE TABLE `distInventory` (
+  `inventoryID` int NOT NULL AUTO_INCREMENT,
+  `distributorID` int,
+  `title` varchar(255),
+  `year` YEAR,
+  `price` int,
+  `quantity` int,
+  `img` varchar(1000),
+  PRIMARY KEY (`inventoryID`),
+  FOREIGN KEY (`distributorID`) REFERENCES `distributors` (`distributorID`)
+)ENGINE=InnoDB;
+
+
 -- RELATIONSHIP TABLES
 
 DROP TABLE IF EXISTS `purchasedItems`;
@@ -109,11 +123,11 @@ INSERT INTO records (name, artist, year, price, quantity, distributor) VALUES
     ;
 
 
-INSERT INTO distributors (name, street, city, state, zip, phone) VALUES
-    ('Records R Us', '123 Vinyl Ave', 'San Diego', 'CA', '98054', '231-987-4537'),
-    ('Vinyl Warehouse', '456 Distribution St', 'Boise', 'ID', '72341', '560-678-9014'),
-    ('House of Vinyl', '123 Utah Steet', 'Salt Lake City', 'UT', '12908', '451-671-5612')
-    ;
+-- INSERT INTO distributors (name, street, city, state, zip, phone) VALUES
+--     ('Records R Us', '123 Vinyl Ave', 'San Diego', 'CA', '98054', '231-987-4537'),
+--     ('Vinyl Warehouse', '456 Distribution St', 'Boise', 'ID', '72341', '560-678-9014'),
+--     ('House of Vinyl', '123 Utah Steet', 'Salt Lake City', 'UT', '12908', '451-671-5612')
+--     ;
 
 INSERT INTO orders (distributorID, orderDate, orderFilled, distributor) VALUES
     ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2020-06-15', true, 'House of Vinyl'),

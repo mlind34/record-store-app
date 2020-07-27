@@ -44,14 +44,14 @@
 
         <tr id="{{ customer.id }}">
             
-            <td class="table-input">{{ customer.fname }}</td>
-            <td class="table-input">{{customer.lname }}</td>
-            <td class="table-input">{{ customer.street }}</td>
-            <td class="table-input">{{ customer.city }}</td>
-            <td class="table-input">{{ customer.state }}</td>
-            <td class="table-input">{{ customer.zip }}</td>
-            <td class="table-input">{{ customer.email }}</td>
-            <td class="table-input">{{ customer.phone }}</td>
+            <td class="table-input">{{ customer['firstName'] }}</td>
+            <td class="table-input">{{customer['lastName'] }}</td>
+            <td class="table-input">{{ customer['street'] }}</td>
+            <td class="table-input">{{ customer['city'] }}</td>
+            <td class="table-input">{{ customer['state'] }}</td>
+            <td class="table-input">{{ customer['zip'] }}</td>
+            <td class="table-input">{{ customer['email'] }}</td>
+            <td class="table-input">{{ customer['phone'] }}</td>
             <td><input type="submit" value="Delete" class="ui red button"></td>
             <td><input type="submit" value="Update" class="ui teal button" id="{{ customer.id }}"></td>
             <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer.id }}"></td>
@@ -90,24 +90,35 @@
             <tr>
                 <th>Name</th>
                 <th>Street Address</th>
-                <th>City, State</th>
+                <th>City</th>
+                <th>State</th>
                 <th>Zip Code</th>
                 <th>Phone Number</th>
                 <th>Delete</th>
                 <th>Update</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
 
                 {% for distributor in distributors %}
-            <tr id="{{ distributor.id }}">
-                <td class="table-input">{{ distributor.name }}</td>
-                <td class="table-input">{{ distributor.street }}</td>
-                <td class="table-input">{{ distributor.city }}, {{ distributor.state }}</td>
-                <td class="table-input">{{ distributor.zip }}</td>
-                <td class="table-input">{{ distributor.phone }}</td>
+                <tr id="{{ distributor.id }}">
+            
+                <td class="table-input">{{ distributor['name'] }}</td>
+                <td class="table-input">{{ distributor['street'] }}</td>
+                <td class="table-input">{{ distributor['city'] }}</td>
+                <td class="table-input">{{ distributor['state'] }}</td>
+                <td class="table-input">{{ distributor['zip'] }}</td>
+                <td class="table-input">{{ distributor['phone'] }}</td>
                 <td><input type="submit" value="Delete" class="ui red button"></td>
                 <td><input type="submit" value="Update" class="ui teal button" id="{{ distributor.id }}"></td>
+                <form action="/distributors/view-inventory" method="POST">
+                  <td><input type="hidden" name="dist_id" value="{{ distributor['distributorID'] }}"></td>
+                  <td><input type="hidden" name="dist_name" value="{{ distributor['name'] }}"></td>
+                  <td><input type="submit" class="ui teal button" value="View Inventory"></td>
+                </form>
             </tr>
             {% endfor %}
 
@@ -151,12 +162,12 @@
       
       {% for record in records %}
       <tr id="{{ record.id }}">
-          <td class="table-input">${{ record.price }}</td>
-          <td class="table-input">{{ record.quantity }}</td>
-          <td class="table-input">{{ record.year }}</td>
-          <td class="table-input">{{ record.artist }}</td>
-          <td class="table-input">{{ record.name }}</td>
-          <td class="table-input">{{ record.distributor }}</td>
+          <td class="table-input">${{ record['price'] }}</td>
+          <td class="table-input">{{ record['quantity'] }}</td>
+          <td class="table-input">{{ record['year']}}</td>
+          <td class="table-input">{{ record['artist'] }}</td>
+          <td class="table-input">{{ record['name'] }}</td>
+          <td class="table-input">{{ record['distributor'] }}</td>
           <td><input class="ui teal button" type="submit" value="Update" id="{{ record.id }}"></td>
       </tr>
       {% endfor %}
@@ -184,7 +195,6 @@
       <tr>
         <th>Date</th>
         <th>Method</th>
-        <th>Payment Confirmation</th>
         <th>Total</th>
         <th>Delete</th>
         <th>Update</th>
@@ -197,18 +207,18 @@
       {% for purchase in purchases %}
       <tr id="{{ purchase.id }}">
 
-          <td class="table-input">{{ purchase.purchaseDate }}</td>
-          <td class="table-input">{{ purchase.paymentMethod }}</td>
-            {% if purchase.paid == True %}
+          <td class="table-input">{{ purchase['purchaseDate'] }}</td>
+          <td class="table-input">{{ purchase['paymentMethod'] }}</td>
+            <!-- {% if purchase.paid == True %}
           <td class="table-input">Confirmed</td>
             {% else %}
             <td class="table-input">Missing Payment</td>
-            {% endif %}
-          <td class="table-input">{{ purchase.totalPrice }}</td>
+            {% endif %} -->
+          <td class="table-input">{{ purchase['totalPrice'] }}</td>
           <td><input type="submit" value="Delete" class="ui red button"></td>
           <td><input type="submit" value="Update" class="ui teal button" id="{{ purchase.id }}"></td>
-          <td><input type="submit" value="Add Item" class="ui teal button" id="{{ purchase.id }}"></td>
-          <td><input type="submit" value="View Items" class="ui teal button" id="{{ purchase.id }}"></td>
+          <td><input type="submit" value="Add Item" class="ui blue button" id="{{ purchase.id }}"></td>
+          <td><input type="submit" value="View Items" class="ui blue button" id="{{ purchase.id }}"></td>
       </tr>
       {% endfor %}
       
@@ -223,7 +233,7 @@
 
   <div class="btn-wrapper">
     <div class="add-btn">
-        <form action="/orders/add-order">
+        <form action="/orders/add-order/select-distributor">
             <input type="submit" class="big ui primary button" value="Add Order">
         </form>
     </div>
@@ -244,9 +254,9 @@
       {% for order in orders %}
       <tr id="{{ order.order_id }}">
           
-          <td class="table-input">{{ order.order_id }}</td>
-          <td class="table-input">{{ order.order_date }}</td>
-          {% if order.filled == True %}
+          <td class="table-input">{{ order['distributor'] }}</td>
+          <td class="table-input">{{ order['orderDate'] }}</td>
+          {% if order['orderFilled'] == True %}
           <td class="ui checkbox">
             <input type="checkbox" name="public" checked='True'>
             <label></label>
@@ -257,7 +267,7 @@
               <label></label>
             </td>
           {% endif %}
-          <td><input type="submit" value="Add Item" class="ui teal button" id="{{ order.id }}" onlick="orderAdd()"></td>
+          <td><input type="submit" value="Add Item" class="ui teal button" id="{{ order.id }}"></td>
           <td><input type="submit" value="View Items" class="ui teal button" id="{{ order.id }}"></td>
           
       </tr>
@@ -268,6 +278,91 @@
       
   </table>
 
+  {% elif cust_purchases %}
+  <h1 id="genericTitle">Purchases</h1>
+
+  <div class="btn-wrapper">
+        <div class="add-btn">
+            <form action="/purchases/add-purchase">
+                <input type="submit" class="big ui primary button" value="Add Purchase">
+            </form>
+        </div>  
+    </div>
+
+<table class="ui striped table purchases-table" id="dataTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Method</th>
+        <th>Total</th>
+        <th>Delete</th>
+        <th>Update</th>
+        <th>Add Item</th>
+        <th>View Items</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      {% for purchase in purchases %}
+      <tr id="{{ purchase.id }}">
+
+          <td class="table-input">{{ purchase['purchaseDate'] }}</td>
+          <td class="table-input">{{ purchase['paymentMethod'] }}</td>
+            <!-- {% if purchase.paid == True %}
+          <td class="table-input">Confirmed</td>
+            {% else %}
+            <td class="table-input">Missing Payment</td>
+            {% endif %} -->
+          <td class="table-input">{{ purchase['totalPrice'] }}</td>
+          <td><input type="submit" value="Delete" class="ui red button"></td>
+          <td><input type="submit" value="Update" class="ui teal button" id="{{ purchase.id }}"></td>
+          <td><input type="submit" value="Add Item" class="ui blue button" id="{{ purchase.id }}"></td>
+          <td><input type="submit" value="View Items" class="ui blue button" id="{{ purchase.id }}"></td>
+      </tr>
+      {% endfor %}
+      
+      
+    </tbody>
+      
+  </table>
+
+{% elif inventory %}
+
+<h1>Displaying Inventory For {{ dist_name }}</h1>
+
+<div class="ui link cards">
+                    
+  {% for i in inventory %}
+      
+  <div class="card">
+    <div class="image" id="albumImage">
+      <img src={{ i['img'] }}>
+    </div>
+    <div class="content">
+      <div class="header" id="albumTitle">{{ i['title'] }}</div>
+      <div class="meta">
+        <p id="albumYear">{{ i['year'] }}</p>
+      </div>
+      
+    </div>
+    
+    <div class="extra content">
+      <!-- <button type="submit" class="add-to-order">Add to Order</button> -->
+      
+      <span>
+        <i class="money icon"></i>
+          ${{ i['price'] }}
+          
+      </span>
+
+      <span>
+        quantity: {{ i['quantity'] }}
+      </span>
+      
+    </div>
+    
+  </div>
+  {% endfor %}
 
 {% endif %}
 
