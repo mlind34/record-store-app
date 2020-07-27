@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, make_response, request, redirect, url_for
 import requests
 import random
+import re
 from random import randint
 # import grequests
 from db_connect import connect_to_database, execute_query
@@ -147,6 +148,7 @@ def create_inventory():
 
     for i in range(1, 10):
         genre = random.choice(genres)
+        print(genre)
        
         url = f"https://api.discogs.com/database/search?genre='{genre}'&page={i}&key=yAkaOKZIxeKFgRSyIXEY&secret=hbaRZHEfvIVguItMHliaGvliDAJVbBCw"
         response = requests.request("GET", url, data = payload)
@@ -154,9 +156,12 @@ def create_inventory():
         
         for j in range(0, 20):
             key = 'year'
-            if key in response['results'][j]:
+           
+            if key in response['results'][j] and response['results'][j]['country'] == 'US':
                 title = response['results'][j]['title']
-                title = title.replace("'", "\\'")
+                
+                
+                
                 
                 
                 year = response['results'][j]['year']
@@ -164,7 +169,7 @@ def create_inventory():
                 quantity = randint(0, 50)
                 img = response['results'][j]['cover_image']
                 
-                insert_inventory = f"INSERT INTO distInventory(distributorID, title, year, price, quantity, img) VALUES ({dist_id}, '{title}', '{year}', {price}, {quantity}, '{img}')"
+                insert_inventory = f'INSERT INTO distInventory(distributorID, title, year, price, quantity, img) VALUES ({dist_id}, "{title}", "{year}", {price}, {quantity}, "{img}")'
                 execute_insert = execute_query(sql_connection, insert_inventory)
     
 
@@ -203,9 +208,9 @@ def add_record():
 
 
 
-# CREATE ORDER
+# SELECT DISTRIBUTOR
 @app.route('/orders/add-order/select-distributor', methods=['POST', 'GET'])
-def add_order():
+def select_dist():
     sql_connection = connect_to_database()
     if request.method == 'GET':
         
@@ -213,13 +218,25 @@ def add_order():
         distributors_query = execute_query(sql_connection, distributors).fetchall()
         return render_template('forms.html', title='Create Order', distributor_order=distributors_query)
 
-
+# CREATE ORDER
+@app.route('/orders/add-order/create-order', methods=['GET', 'POST'])
+def create_order():
+    sql_connection = connect_to_database()
     if request.method == 'POST':
         dist_name = request.form['Distributor']
         print(dist_name)
         dist_inventory_query = f"SELECT title, year, price, quantity, img FROM distInventory WHERE distributorID=(SELECT distributorID FROM distributors WHERE name='{dist_name}')"
         dist_inventory = execute_query(sql_connection, dist_inventory_query).fetchall()
-        return render_template('forms.html', dist_inventory=dist_inventory)
+        return render_template('forms.html', dist_inventory=dist_inventory, dist_name=dist_name)
+
+# CONFIRM ORDER
+@app.route('/orders/add-order/confirm-order', methods=['GET', 'POST'])
+def confirm_order():
+    if request.method == 'POST':
+        print(request.form)
+
+    return render_template('views.html', title='Order Confirmed')
+
 
 
 # Javascript Routes

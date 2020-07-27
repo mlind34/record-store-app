@@ -60,6 +60,7 @@ CREATE TABLE `orders` (
   `orderDate` DATE NOT NULL,
   `orderFilled` BOOLEAN NOT NULL,
   `distributor` varchar(255),
+  `orderTotal` int,
   PRIMARY KEY (`orderID`),
   CONSTRAINT `distributor_ibfk_1` FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`)
 ) ENGINE=InnoDB;

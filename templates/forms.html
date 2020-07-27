@@ -291,7 +291,7 @@
     <h1>New Order</h1>
 
     <label for="">Select a Distributor</label>
-    <form action="/orders/add-order" method="POST">
+    <form action="/orders/add-order/create-order" method="POST">
         <select name="Distributor" class="ui dropdown" id="">
             <option value="">Distributors</option>
             {% for distributor in distributor_order %}
@@ -305,7 +305,40 @@
 
 {% elif dist_inventory %}
 
+
+<h1>Order for {{ dist_name }}</h1>
+
+<h2>My Order:</h2>
+<form action="/orders/add-order/confirm-order" method="POST" id="orderForm">
+<table class="ui very basic collapsing celled table" >
+    <thead>
+      <tr><th>Cover</th><th>Title</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </tr></thead>
+    
+    
+    <tbody id="orderTable">
+        
+    
+    
+            <tr>
+                <td></td>
+                <td></td>
+                <td><input type="hidden" id="orderTotal" name="total" >Total Price: </td>
+                <td><input type="submit" class="ui primary button" value="Confirm Order"></td>
+                
+            </tr>
+        
+        </tbody>
+
+  </table>
+</form> 
+
+
 <div class="ui link cards">
+
+    
                     
     {% for i in dist_inventory %}
         
@@ -322,15 +355,16 @@
       </div>
       
       <div class="extra content">
-        <!-- <button type="submit" class="add-to-order">Add to Order</button> -->
+        <button type="submit" data-price="{{ i['price'] }}" data-quantity="1" 
+        data-title="{{ i['title'] }}" data-img="{{ i['img'] }}" id="addAlbum" class="add-to-order">Add to Order</button>
         
-        <span>
+        <span id="price">
           <i class="money icon"></i>
             ${{ i['price'] }}
             
         </span>
-  
-        <span>
+            
+        <span id="quantity">
           quantity: {{ i['quantity'] }}
         </span>
         
@@ -340,14 +374,57 @@
 
     {% endfor %}
 
- <!-- <script>
-    searchBtn = document.getElementById('searchBtn')
-    searchBtn.addEventListener('click', function(){
-        console.log(document.getElementById('recordSearch').value)
-    })
+ <script>
+    orderTable = document.getElementById('orderTable')
+    albumCards = document.getElementsByClassName('ui link cards');
+    orderTotal = document.getElementById('orderTotal')
+    total = 0
+    albumCards[0].addEventListener('click', (event) => {
+        let target = event.target;
+        if(target.id == 'addAlbum'){
+            let price = target.dataset.price;
+            let quantity = target.dataset.quantity;
+            let img = target.dataset.img;
+            let title = target.dataset.title;
+            total += Number(price)
+            orderTotal.innerText = `Total Price: ${total}` 
+            createRow(title, price, quantity, img);
+        }
+        
+    });
+
+    function createRow(title, price, quantity, img) {
+
+        args = ['title', 'price', 'quantity']
+        orderRow = document.createElement('tr');
+        orderRow.setAttribute('class', 'order-item');
+        imgCell = document.createElement('td')
+        imgCell.setAttribute('id', 'imageData')
+        imgCell.innerHTML = `<img src=${img}>`
+        
+        orderRow.append(imgCell)
+        
+        for(var i = 0; i < arguments.length - 1; i++){
+            orderCell = document.createElement('td');
+            orderInput = document.createElement('input');
+            orderInput.setAttribute('name', `${args[i]}`)
+            orderInput.setAttribute('type', 'hidden')
+            orderInput.setAttribute('value', arguments[i])
+            
+            orderCell.innerText = arguments[i];
+            orderCell.append(orderInput)
+            orderRow.append(orderCell)
+        }
+
+        orderTable.append(orderRow)
+    }
+    
+    // albumCards.addEventListener('click', function(){
+    //     console.log(addAlbum)
+    // })
     
 
-</script> -->
+</script>
 
 {% endif %}
 

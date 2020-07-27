@@ -2,3 +2,4 @@ host = 'classmysql.engr.oregonstate.edu'  #DON'T CHANGE ME UNLESS THE INSTRUCTIO
 user = 'cs340_lindmax' #CHANGE ME
 passwd = '2191' #CHANGE ME
 db = 'cs340_lindmax' #CHANGE ME
+charset = 'utf8'
