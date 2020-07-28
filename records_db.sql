@@ -21,20 +21,7 @@ CREATE TABLE `purchases` (
   `paymentMethod` varchar(255) NOT NULL,
   `totalPrice` DEC(65, 2) NOT NULL,
   PRIMARY KEY (`purchaseID`),
-  CONSTRAINT `customer_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `customers`(`customerID`)
-) ENGINE=InnoDB;
-
-
-DROP TABLE IF EXISTS `records`;
-CREATE TABLE `records` (
-  `productID` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `artist` varchar(255) NOT NULL,
-  `year` YEAR NOT NULL,
-  `price` DEC(5, 2) NOT NULL,
-  `quantity` int NOT NULL,
-  `distributor` varchar(255),
-  PRIMARY KEY (`productID`)
+  FOREIGN KEY (`customerID`) REFERENCES `customers`(`customerID`)
 ) ENGINE=InnoDB;
 
 
@@ -51,6 +38,20 @@ CREATE TABLE `distributors` (
   PRIMARY KEY (`distributorID`)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `records`;
+CREATE TABLE `records` (
+  `productID` int NOT NULL AUTO_INCREMENT,
+  `distributorID` int,
+  `name` varchar(255) NOT NULL,
+  `artist` varchar(255) NOT NULL,
+  `year` YEAR NOT NULL,
+  `price` DEC(5, 2) NOT NULL,
+  `quantity` int NOT NULL,
+  `distributor` varchar(255),
+  PRIMARY KEY (`productID`),
+  FOREIGN KEY (`distributorID`) REFERENCES `distributors` (`distributorID`)
+) ENGINE=InnoDB;
+
 
 
 DROP TABLE IF EXISTS `orders`;
@@ -62,7 +63,7 @@ CREATE TABLE `orders` (
   `distributor` varchar(255),
   `orderTotal` int,
   PRIMARY KEY (`orderID`),
-  CONSTRAINT `distributor_ibfk_1` FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`)
+  FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `distInventory`;
@@ -87,8 +88,8 @@ CREATE TABLE `purchasedItems` (
     `purchaseID` int,
     `productID` int,
     PRIMARY KEY (`purchasedItemID`),
-    CONSTRAINT `purchase_ibfk_1` FOREIGN KEY (`purchaseID`) REFERENCES `purchases` (`purchaseID`),
-    CONSTRAINT `product_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `records` (`productID`)
+    FOREIGN KEY (`purchaseID`) REFERENCES `purchases` (`purchaseID`),
+    FOREIGN KEY (`productID`) REFERENCES `records` (`productID`)
 ) ENGINE=InnoDB;
 
 
@@ -98,8 +99,8 @@ CREATE TABLE `orderedItems` (
     `orderID` int,
     `productID` int,
     PRIMARY KEY (`orderedItemID`),
-    CONSTRAINT `order_ibfk_1` FOREIGN KEY (`orderID`) REFERENCES `orders` (`orderID`),
-    CONSTRAINT `product_ibfk_3` FOREIGN KEY (`productID`) REFERENCES `records` (`productID`)
+    FOREIGN KEY (`orderID`) REFERENCES `orders` (`orderID`),
+    FOREIGN KEY (`productID`) REFERENCES `records` (`productID`)
 ) ENGINE=InnoDB;
 
 

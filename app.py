@@ -1,9 +1,7 @@
 from flask import Flask, render_template, jsonify, make_response, request, redirect, url_for
 import requests
 import random
-import re
 from random import randint
-# import grequests
 from db_connect import connect_to_database, execute_query
 from flask_cors import CORS
 app = Flask(__name__)
@@ -198,10 +196,23 @@ def add_purchase():
 
 
 # ADD RECORDS
-@app.route('/records/add-record')
+@app.route('/records/add-record', methods=['POST', 'GET'])
 def add_record():
+    sql_connection = connect_to_database()
+    if request.method == 'POST':
+        name = request.form['name']
+        artist = request.form['artist']
+        price = request.form['price']
+        quantity = request.form['quantity']
+        year = request.form['year']
+        distributor = request.form['distributor']
+        add_record = f"INSERT INTO records(name, artist, year, price, quantity, distributor) VALUES ('{name}', '{artist}', '{year}', '{price}', '{quantity}', '{distributor}')"
+        record_query = execute_query(sql_connection, add_record).fetchall()
 
-    return render_template('forms.html', title='Add Record')
+
+        return redirect('/records')
+    
+    return render_template('forms.html', title = 'Add Record')
 
 
 

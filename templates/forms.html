@@ -207,7 +207,7 @@
 {% elif title == 'Add Record' %}
 
 <div class="ui container">
-    <form class="ui form">
+    <form class="ui form" action="/records/add-record" method="POST">
         <h3 class="ui dividing header">Add Record</h3>
         <div class="two fields">
             <div class="field">
@@ -216,7 +216,7 @@
             </div>
             <div class="field">
                 <label>Quantity</label>
-                <input type="text" name="price" placeholder="Quantity">
+                <input type="text" name="quantity" placeholder="Quantity">
             </div>
         </div>
 
@@ -232,10 +232,7 @@
         </div>
      
             <div class="two fields">
-                <div class="field">
-                    <label>Type</label>
-                    <input type="text" name="type" placeholder="Type">
-                </div>
+                
                 <div class="field">
                     <label>Name</label>
                     <input type="text" name="name" placeholder="Name">
@@ -244,7 +241,7 @@
 
             <div class="field">
                 <label>Distributor</label>
-                <input type="text" name="city" placeholder="Distributor">
+                <input type="text" name="distributor" placeholder="Distributor">
             </div>
 
         <button class="ui primary button" type="submit">Submit</button>

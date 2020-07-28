@@ -196,7 +196,6 @@
         <th>Date</th>
         <th>Method</th>
         <th>Total</th>
-        <th>Delete</th>
         <th>Update</th>
         <th>Add Item</th>
         <th>View Items</th>
@@ -215,7 +214,7 @@
             <td class="table-input">Missing Payment</td>
             {% endif %} -->
           <td class="table-input">{{ purchase['totalPrice'] }}</td>
-          <td><input type="submit" value="Delete" class="ui red button"></td>
+          
           <td><input type="submit" value="Update" class="ui teal button" id="{{ purchase.id }}"></td>
           <td><input type="submit" value="Add Item" class="ui blue button" id="{{ purchase.id }}"></td>
           <td><input type="submit" value="View Items" class="ui blue button" id="{{ purchase.id }}"></td>
@@ -229,7 +228,7 @@
 
   <!-- ORDERS VIEW -->
   {% elif orders %}
-  <h1 id="genericTitle">Orders</h1>
+  <h1 id="genericTitle">Distributor Orders</h1>
 
   <div class="btn-wrapper">
     <div class="add-btn">
@@ -245,7 +244,6 @@
         <th>Distributor</th>
         <th>Order Date</th>
         <th>Order Filled</th>
-        <th>Add Item</th>
         <th>View Items</th>
       </tr>
     </thead>
@@ -267,7 +265,6 @@
               <label></label>
             </td>
           {% endif %}
-          <td><input type="submit" value="Add Item" class="ui teal button" id="{{ order.id }}"></td>
           <td><input type="submit" value="View Items" class="ui teal button" id="{{ order.id }}"></td>
           
       </tr>

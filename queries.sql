@@ -12,7 +12,7 @@ DELETE FROM customers WHERE customerID = :delete button associated with customer
 UPDATE customers SET firstName = :firstName_input, lastName = :lastName_input, street = :street_input city = :city_input, state = :state_input, zip = :zip_input, phone = :phone_input, email = :email_input;
 
 -- view customers purchases
-SELECT purchasedate, paymentMethod, totalPrice FROM purchases WHERE customerID = :id associated with row
+SELECT purchaseDate, paymentMethod, totalPrice FROM purchases INNER JOIN customers ON customers.customerID = + id(associated with row) + AND purchases.customerID = +id(associated with row)
 
 -- ADD CUSTOMER PAGE
 -- adds a customer
