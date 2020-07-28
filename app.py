@@ -159,10 +159,7 @@ def create_inventory():
            
             if key in response['results'][j] and response['results'][j]['country'] == 'US':
                 title = response['results'][j]['title']
-                
-                
-                
-                
+     
                 
                 year = response['results'][j]['year']
                 price = randint(3, 50)
