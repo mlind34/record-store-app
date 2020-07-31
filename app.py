@@ -1,11 +1,16 @@
 from flask import Flask, render_template, jsonify, make_response, request, redirect, url_for
 import requests
 import random
+import gevent
+import subprocess
 from random import randint
 from db_connect import connect_to_database, execute_query
 from flask_cors import CORS
+
 app = Flask(__name__)
 CORS(app)
+
+
 
 # 
 # VIEWS
@@ -22,13 +27,26 @@ def home():
     return render_template('home.html')
 
 # CUSTOMERS
-@app.route('/customers', methods=['GET'])
+@app.route('/customers', methods=['GET', 'POST'])
 def show_customer():
     sql_connection = connect_to_database()
     if request.method == 'GET':
         customers = 'SELECT customerID, firstName, lastName, street, city, state, zip, phone, email FROM customers'
         customers_query = execute_query(sql_connection, customers).fetchall()
         return render_template('views.html', customers=customers_query, title='Customers')
+    
+    if request.method == 'POST':
+        if request.form['submit_btn'] == 'Delete':
+            customerID = request.form['customerID']
+            delete_query = f"DELETE FROM customers WHERE customerID={customerID}"
+            execute_query(sql_connection, delete_query)
+            return redirect('/customers')
+
+        if request.form['submit_btn'] == 'Update':
+            customerID = request.form['customerID']
+            
+
+            return redirect('/customers')
 
 
 # DISTRIBUTORS
@@ -92,9 +110,6 @@ def view_cust_purchases(var):
 
 
 
-
-
-
 # 
 # FORMS
 # 
@@ -105,7 +120,6 @@ def view_cust_purchases(var):
 def add_customer():
     return render_template('forms.html', title='Add Customer')
     
-
 
 
 # ADD DISTRIBUTOR
@@ -246,5 +260,3 @@ def confirm_order():
     return render_template('views.html', title='Order Confirmed')
 
 
-
-# Javascript Routes

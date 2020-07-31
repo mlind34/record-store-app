@@ -52,9 +52,12 @@
             <td class="table-input">{{ customer['zip'] }}</td>
             <td class="table-input">{{ customer['email'] }}</td>
             <td class="table-input">{{ customer['phone'] }}</td>
-            <td><input type="submit" value="Delete" class="ui red button" id="{{ customer['customerID'] }}"></td>
-            <td><input type="submit" value="Update" class="ui teal button" id="{{ customer['customerID'] }}"></td>
-            <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer['customerID'] }}"></td>
+            <form action="/customers" method="POST">
+              <td><input type="hidden" name="customerID" value="{{ customer['customerID'] }}"></td>
+              <td><input type="submit" value="Delete" name="submit_btn" class="ui red button"></td>
+              <td><input type="submit" value="Update" name="submit_btn" class="ui teal button" ></td>
+              <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer['customerID'] }}"></td>
+          </form>
 
         </tr>
 
