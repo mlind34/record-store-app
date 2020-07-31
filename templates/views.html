@@ -135,7 +135,7 @@
       </div>
 
 <!-- RECORDS VIEW -->
-{% elif records %}
+{% elif (records or recordsPurch) %}
 
 <div class="record-header">
 
@@ -143,9 +143,14 @@
 
 <div class="btn-wrapper">
     <div class="add-btn">
+        {% if records %}
         <form action="/records/add-record">
             <input type="submit" class="big ui primary button" value="Add Record">
         </form>
+        {% endif %}
+            {% if recordsPurch %}
+            <input type="submit" class="big ui primary button" value="Submit Records for Order">
+            {% endif %}
     </div>
 </div>
 
@@ -163,20 +168,37 @@
         <th>Artist</th>
         <th>Name</th>
         <th>Distributor</th>
+        {% if records %}
         <th>Update</th>
+        {% endif %}
+        {% if recordsPurch %}
+        <th>Add</th>
+        {% endif %}
+
       </tr>
     </thead>
     <tbody>
       
       {% for record in records %}
-      <tr id="{{ record.id }}">
+      <tr id="{{ record['productID'] }}">
           <td class="table-input">${{ record['price'] }}</td>
           <td class="table-input">{{ record['quantity'] }}</td>
           <td class="table-input">{{ record['year']}}</td>
           <td class="table-input">{{ record['artist'] }}</td>
           <td class="table-input">{{ record['name'] }}</td>
           <td class="table-input">{{ record['distributor'] }}</td>
-          <td><input class="ui teal button" type="submit" value="Update" id="{{ record.id }}"></td>
+          <td><input class="ui teal button" type="submit" value="Update" id="{{ record['productID'] }}"></td>
+      </tr>
+      {% endfor %}
+      {% for record in recordsPurch %}
+      <tr id="{{ record['productID'] }}">
+          <td class="table-input">${{ record['price'] }}</td>
+          <td class="table-input">{{ record['quantity'] }}</td>
+          <td class="table-input">{{ record['year']}}</td>
+          <td class="table-input">{{ record['artist'] }}</td>
+          <td class="table-input">{{ record['name'] }}</td>
+          <td class="table-input">{{ record['distributor'] }}</td>
+          <td><input class="ui teal button" type="submit" value="Add to Order" id="{{ record['productID'] }}"></td>
       </tr>
       {% endfor %}
       

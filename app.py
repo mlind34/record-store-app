@@ -91,13 +91,26 @@ def show_distributor():
         distributors_query = execute_query(sql_connection, distributors).fetchall()
         return render_template('views.html', distributors=distributors_query, title='Distributors')
 
+    if request.method == 'POST':
+        if request.form['submit_btn'] == 'Delete':
+            distributorID = request.form['distributorID']
+            delete_query = f"DELETE FROM distributors WHERE distributorID={distributorID}"
+            execute_query(sql_connection, delete_query)
+            return redirect('/distributors')
+
+        if request.form['submit_btn'] == 'Update':
+            customerID = request.form['customerID']
+            
+
+            return redirect('/customers')
+
 
 # RECORDS 
 @app.route('/records', methods=['POST', 'GET'])
 def show_records():
     sql_connection = connect_to_database()
     if request.method == 'GET':
-        records = 'SELECT name, artist, year, price, quantity, distributor FROM records'
+        records = 'SELECT productID, name, artist, year, price, quantity, distributor FROM records'
         records_query = execute_query(sql_connection, records).fetchall()
         return render_template('views.html', records=records_query, title='Records')
 
@@ -249,10 +262,29 @@ def view_dist_inventory():
 
 
 # ADD PURCHASE
-@app.route('/purchases/add-purchase')
+@app.route('/purchases/add-purchase', methods=['POST', 'GET'])
 def add_purchase():
+    sql_connection = connect_to_database()
+    # if request.method == 'POST':
+    records = 'SELECT productID, name, artist, year, price, quantity, distributor FROM records'
+    records_query = execute_query(sql_connection, records).fetchall()
+    return render_template('views.html', recordsPurch=records_query, title='recordsPurch')
 
+recordsPurchased = []
+
+@app.route('/purchases/add-purchase/final', methods=['POST', 'GET'])
+def add_purchase_final():
+    sql_connection = connect_to_database()
+    if request.method == 'POST':
+        data = request.get_json()
+        print(data)
+    
+    print(recordsPurchased)
     return render_template('forms.html', title='Add Purchase')
+
+
+
+
 
 
 # ADD RECORDS
