@@ -5,7 +5,7 @@
 {% if title == 'Add Customer' %}
 
 <div class="ui container">
-    <form class="ui form">
+    <form class="ui form" action="/customers/add-customer" method="POST">
         <h3 class="ui dividing header">Customer Information</h3>
         <div class="field">
             <label>Name</label>
@@ -31,7 +31,7 @@
         </div>
             <div class="field" id="state">
                 <label>State</label>
-                <select class="ui fluid dropdown">
+                <select class="ui fluid dropdown" name="state">
                     <option value="">State</option>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
