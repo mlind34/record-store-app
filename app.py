@@ -116,9 +116,22 @@ def view_cust_purchases(var):
 
 
 # ADD CUSTOMER
-@app.route('/customers/add-customer')
+@app.route('/customers/add-customer', methods=['POST', 'GET'])
 def add_customer():
-    return render_template('forms.html', title='Add Customer')
+    sql_connection = connect_to_database()
+    if request.method == 'POST':
+        firstName = request.form['first-name']
+        lastName = request.form['last-name']
+        street = request.form['street']
+        city = request.form['city']
+        state = request.form['state']
+        email = request.form['email']
+        phone = request.form['phone']
+        add_customer = f"INSERT INTO customers(firstName, lastName, street, city, state, email, phone) VALUES ('{firstName}', '{lastName}', '{street}', '{city}', '{state}', '{email}', '{phone}')"
+        customer_query = execute_query(sql_connection, add_customer).fetchall()
+        return redirect('/customers')
+    
+    return render_template('forms.html', title = 'Add Customer')
     
 
 
