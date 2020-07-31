@@ -1,8 +1,8 @@
 let dataTable = document.getElementById('dataTable');
 console.log(dataTable);
-let buttons = dataTable.querySelectorAll('input');
+let buttons = document.querySelectorAll('input');
 console.log(buttons);
-
+recordsAdded = [];
 for(let i in buttons) {
 
   if(buttons[i].value == 'Purchases') {
@@ -34,16 +34,42 @@ for(let i in buttons) {
         // })
       })
   }
+  if(buttons[i].value == 'Add to Order') {
+    recordsAdded = [];
+    buttons[i].addEventListener("click", (event) => {
+      makeConfirm(buttons[i]);
+      event.preventDefault;
+      recordsAdded.push(buttons[i].id);
+      console.log(recordsAdded);
+    });
+  }
+  if(buttons[i].value == 'Submit Records for Order') {
+    console.log("Test");
+    data = {
+      recordIDs: recordsAdded
+    };
+    buttons[i].addEventListener("click", (event) => {
+      let subReq = new XMLHttpRequest();
+        subReq.open("POST", "http://flip3.engr.oregonstate.edu:5199/purchases/add-purchase/final", true);
+        subReq.setRequestHeader("content-type", "application/json");
+        subReq.addEventListener("load", () => {
+          // window.location.href = '/purchases/add-purchase/final'
+        })
+        data = JSON.stringify(data);
+        subReq.send(data);
+        event.preventDefault();
+    });
+  }
 }
 
+dataTable.addEventListener('click', (event) =>{
+    let target = event.target;
+    if(target.value == 'Update'){
+        var confirm = makeConfirm(target)
+        updateRow(target.id);
+    }
+});
 
-// dataTable.addEventListener('click', (event) =>{
-//     let target = event.target;
-//     if(target.value == 'Update'){
-//         var confirm = makeConfirm(target)
-//         updateRow(target.id);
-//     }
-// });
 
 
 const updateRow = (id) => {
@@ -59,15 +85,16 @@ const updateRow = (id) => {
 
         input.setAttribute('type', 'text');
 
-        input.setAttribute('size', '17')
-
-        input.setAttribute('value', dataCell[i].innerText)
+        input.setAttribute('size', '17');
+        
+        input.setAttribute('value', dataCell[i].innerText);
 
         dataCell[i].innerHTML = '';
 
         dataCell[i].append(input);
        
     }
+}
 
     // checkInput = document.createElement('input');
     // input.setAttribute('type', 'checkbox');
@@ -79,12 +106,19 @@ const updateRow = (id) => {
     // }
     // checkCell = input
 
-}
 
 
 const makeConfirm = (button) => {
-    button.setAttribute('value', 'Confirm');
-    button.style.backgroundColor = 'rgb(100, 150, 240)'
-    return button;
+    if(button.value == 'Update') {
+      button.setAttribute('value', 'Confirm');
+      button.style.backgroundColor = 'rgb(100, 150, 240)'
+      return button;
+    } else if (button.value == 'Add to Order') {
+      button.setAttribute('value', 'Added');
+      button.style.backgroundColor = 'rgb(100, 150, 240)'
+      button.disabled = true;
+      return button;
+    }
+
 }
 
