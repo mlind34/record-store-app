@@ -42,22 +42,25 @@
         
         {% for customer in customers %}
 
-        <tr id="{{ customer['customerID'] }}">
+        <tr id="{{ customer['customerID'] }}" name='customer'>
+          <form action="/customers" method="POST">
+            <td class="table-input" name="firstName">{{ customer['firstName'] }}</td>
+            <td class="table-input" name="lastName">{{customer['lastName'] }}</td>
+            <td class="table-input" name="street">{{ customer['street'] }}</td>
+            <td class="table-input" name="city">{{ customer['city'] }}</td>
+            <td class="table-input" name="state">{{ customer['state'] }}</td>
+            <td class="table-input" name="zip">{{ customer['zip'] }}</td>
+            <td class="table-input" name="email">{{ customer['email'] }}</td>
+            <td class="table-input" name="phone">{{ customer['phone'] }}</td>
             
-            <td class="table-input">{{ customer['firstName'] }}</td>
-            <td class="table-input">{{customer['lastName'] }}</td>
-            <td class="table-input">{{ customer['street'] }}</td>
-            <td class="table-input">{{ customer['city'] }}</td>
-            <td class="table-input">{{ customer['state'] }}</td>
-            <td class="table-input">{{ customer['zip'] }}</td>
-            <td class="table-input">{{ customer['email'] }}</td>
-            <td class="table-input">{{ customer['phone'] }}</td>
-            <form action="/customers" method="POST">
               <td><input type="hidden" name="customerID" value="{{ customer['customerID'] }}"></td>
-              <td><input type="submit" value="Delete" name="submit_btn" class="ui red button"></td>
-              <td><input type="submit" value="Update" name="submit_btn" class="ui teal button" ></td>
+              <td><input type="submit" value="Delete" id="{{ customer['customerID'] }}" name="submit_btn" class="ui red button"></td>
               <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer['customerID'] }}"></td>
-          </form>
+              <td><input type="submit" value="Update" id="{{ customer['customerID'] }}" name="submit_btn" class="ui teal button" ></td>
+            </form>
+              
+              
+          
 
         </tr>
 
@@ -107,16 +110,18 @@
             <tbody>
 
                 {% for distributor in distributors %}
-                <tr id="{{ distributor.id }}">
-            
-                <td class="table-input">{{ distributor['name'] }}</td>
-                <td class="table-input">{{ distributor['street'] }}</td>
-                <td class="table-input">{{ distributor['city'] }}</td>
-                <td class="table-input">{{ distributor['state'] }}</td>
-                <td class="table-input">{{ distributor['zip'] }}</td>
-                <td class="table-input">{{ distributor['phone'] }}</td>
+                <tr id="{{ distributor['distributorID'] }}" name='distributor'>
+                  <form action="/distributors" method='POST'></form>
+                <td class="table-input" name="name">{{ distributor['name'] }}</td>
+                <td class="table-input" name="street">{{ distributor['street'] }}</td>
+                <td class="table-input" name="city">{{ distributor['city'] }}</td>
+                <td class="table-input" name="state">{{ distributor['state'] }}</td>
+                <td class="table-input" name="zip">{{ distributor['zip'] }}</td>
+                <td class="table-input" name="phone">{{ distributor['phone'] }}</td>
                 <td><input type="submit" value="Delete" class="ui red button"></td>
-                <td><input type="submit" value="Update" class="ui teal button" id="{{ distributor.id }}"></td>
+                <td><input type="submit" value="Update" class="ui teal button" id="{{ distributor['distributorID'] }}"></td>
+                </form>
+
                 <form action="/distributors/view-inventory" method="POST">
                   <td><input type="hidden" name="dist_id" value="{{ distributor['distributorID'] }}"></td>
                   <td><input type="hidden" name="dist_name" value="{{ distributor['name'] }}"></td>

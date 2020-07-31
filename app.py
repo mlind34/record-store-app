@@ -42,12 +42,45 @@ def show_customer():
             execute_query(sql_connection, delete_query)
             return redirect('/customers')
 
-        if request.form['submit_btn'] == 'Update':
-            customerID = request.form['customerID']
-            
+    
+
+@app.route('/update', methods=['POST'])
+def update_customer():
+    sql_connection = connect_to_database()
+    if request.method == 'POST':
+        
+        data = request.get_json()
+
+        print(data['pageType'])
+        if data['pageType'] == 'customer':
+            cust_id = data['id']
+            firstName = data['firstName']
+            lastName = data['lastName']
+            street = data['street']
+            city = data['city']
+            state = data['state']
+            zip_code = data['zip']
+            phone = data['phone']
+            email = data['email']
+
+            cust_query = f"UPDATE customers SET firstName='{firstName}', lastName='{lastName}', street='{street}', city='{city}', state='{state}', zip='{zip_code}', phone='{phone}', email='{email}' WHERE customerID={cust_id}"
+            execute_query(sql_connection, cust_query)
 
             return redirect('/customers')
 
+        if data['pageType'] == 'distributor':
+            dist_id = data['id']
+            name = data['name']
+            street = data['street']
+            city = data['city']
+            state = data['state']
+            zip_code = data['zip']
+            phone = data['phone']
+
+            dist_query = f"UPDATE distributors SET name='{name}', street='{street}', city='{city}', state='{state}', zip='{zip_code}', phone='{phone}' WHERE distributorID={dist_id} "
+            execute_query(sql_connection, dist_query)
+
+            return redirect('/distributors')
 
 # DISTRIBUTORS
 @app.route('/distributors', methods=['POST', 'GET'])
