@@ -63,20 +63,21 @@ CREATE TABLE `orders` (
   `distributor` varchar(255),
   `orderTotal` int,
   PRIMARY KEY (`orderID`),
-  FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`)
+  FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `distInventory`;
 CREATE TABLE `distInventory` (
   `inventoryID` int NOT NULL AUTO_INCREMENT,
   `distributorID` int,
-  `title` varchar(255),
+  `artist` varchar(255),
+  `name` varchar(255),
   `year` YEAR,
   `price` int,
   `quantity` int,
   `img` varchar(1000),
   PRIMARY KEY (`inventoryID`),
-  FOREIGN KEY (`distributorID`) REFERENCES `distributors` (`distributorID`)
+  FOREIGN KEY (`distributorID`) REFERENCES `distributors` (`distributorID`) ON DELETE CASCADE
 )ENGINE=InnoDB;
 
 
@@ -97,10 +98,10 @@ DROP TABLE IF EXISTS `orderedItems`;
 CREATE TABLE `orderedItems` (
     `orderedItemID` int NOT NULL AUTO_INCREMENT,
     `orderID` int,
-    `productID` int,
+    `inventoryID` int,
     PRIMARY KEY (`orderedItemID`),
     FOREIGN KEY (`orderID`) REFERENCES `orders` (`orderID`),
-    FOREIGN KEY (`productID`) REFERENCES `records` (`productID`)
+    FOREIGN KEY (`inventoryID`) REFERENCES `distInventory` (`inventoryID`)
 ) ENGINE=InnoDB;
 
 
@@ -131,9 +132,9 @@ INSERT INTO records (name, artist, year, price, quantity, distributor) VALUES
 --     ('House of Vinyl', '123 Utah Steet', 'Salt Lake City', 'UT', '12908', '451-671-5612')
 --     ;
 
-INSERT INTO orders (distributorID, orderDate, orderFilled, distributor) VALUES
-    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2020-06-15', true, 'House of Vinyl'),
-    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2019-01-06', true, 'Vinyl Warehouse'),
-    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2018-02-18', true, 'Records R Us')
+INSERT INTO orders (distributorID, orderDate, orderFilled, distributor, orderTotal) VALUES
+    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2020-06-15', true, 'House of Vinyl', 45),
+    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2019-01-06', true, 'Vinyl Warehouse', 67),
+    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2018-02-18', true, 'Records R Us', 23)
     ;
 
