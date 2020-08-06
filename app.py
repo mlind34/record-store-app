@@ -120,7 +120,7 @@ def show_records():
 def view_purchases():
     sql_connection = connect_to_database()
     if request.method == 'GET':
-        purchases = 'SELECT purchaseDate, paymentMethod, totalPrice FROM purchases'
+        purchases = 'SELECT purchaseID, purchaseDate, paymentMethod, totalPrice FROM purchases'
         purchases_query = execute_query(sql_connection, purchases).fetchall()
         return render_template('views.html', purchases=purchases_query, title='Purchases')
 
@@ -140,9 +140,8 @@ def view_orders():
 @app.route('/custpurchases/<var>', methods=['GET'])
 def view_cust_purchases(var):
     id = var
-    print(id)
     sql_connection = connect_to_database()
-    purchases = 'SELECT purchaseDate, paymentMethod, totalPrice FROM purchases INNER JOIN customers ON customers.customerID = '+ id +' AND purchases.customerID = '+id
+    purchases = 'SELECT purchaseID, purchaseDate, paymentMethod, totalPrice FROM purchases INNER JOIN customers ON customers.customerID = '+ id +' AND purchases.customerID = '+id
     name = 'SELECT firstName, lastName FROM customers WHERE customers.customerID = '+id
     purchases_query = execute_query(sql_connection, purchases).fetchall()
     name_query = execute_query(sql_connection, name).fetchall()
@@ -260,6 +259,17 @@ def view_dist_inventory():
 
 
 
+#SHOW ITEMS ON A PURCHASE
+@app.route('/purchaseItems', methods=['POST'])
+def show_items():
+    sql_connection = connect_to_database()
+    purch_id = int(request.form['purchaseID'])
+    get_items = f"SELECT name, artist, year, price, distributor FROM records INNER JOIN \
+        purchasedItems ON purchasedItems.productID = records.productID INNER JOIN purchases ON purchases.purchaseID = purchasedItems.purchaseID \
+        WHERE purchases.purchaseID = {purch_id}"
+    items_query = execute_query(sql_connection, get_items).fetchall()
+    return render_template('views.html', purchaseItems=items_query)
+
 # ADD PURCHASE
 @app.route('/purchases/add-purchase', methods=['POST', 'GET'])
 def add_purchase():
@@ -271,15 +281,54 @@ def add_purchase():
 
 recordsPurchased = []
 
-@app.route('/purchases/add-purchase/final', methods=['POST', 'GET'])
+# after records have been selected for a purchase
+@app.route('/purchases/add-purchase/final', methods=['POST', 'GET', 'ADD'])
 def add_purchase_final():
     sql_connection = connect_to_database()
-    if request.method == 'POST':
+    if request.method == 'ADD':
+        recordsPurchased.clear()
         data = request.get_json()
-        print(data)
+        recordArray = data['recordIDs']
+        recordArray = [int(i) for i in recordArray]
+        if recordArray:
+            for i in recordArray:
+                recordsPurchased.append(i)
+            return render_template('forms.html', title='Add Purchase')
     
-    print(recordsPurchased)
-    return render_template('forms.html', title='Add Purchase')
+    if request.method == 'GET':
+        if recordsPurchased:
+            customers = "SELECT customerID, firstName, lastName FROM customers"
+            customers_query = execute_query(sql_connection, customers).fetchall()
+            return render_template('forms.html', title='Add Purchase', customers=customers_query)
+        else:
+            return redirect('/purchases/add-purchase')
+    
+    if request.method == 'POST':
+        if recordsPurchased:
+            print(request.form['customer'])
+            custID = int(request.form['customer'])
+            purchaseDate = request.form['purchasedate']
+            data = request.form['method']
+            print(type(custID), type(purchaseDate), type(data))
+            total = 0
+            for i in recordsPurchased:
+                price_query = f"SELECT price FROM records WHERE records.productID = {i}"
+                price_query_ex = execute_query(sql_connection, price_query).fetchall()
+                total += price_query_ex[0]['price']
+            insert_purchases = f"INSERT INTO purchases(customerID, purchaseDate, paymentMethod, totalPrice) VALUES ({custID}, \
+                '{purchaseDate}', '{data}', {total})"
+            purchases_query = execute_query(sql_connection, insert_purchases).fetchall()
+            last_purchase_id = f"SELECT LAST_INSERT_ID()"
+            last_purch_id_query = execute_query(sql_connection, last_purchase_id).fetchall()
+            last_id = last_purch_id_query[0]['LAST_INSERT_ID()']
+            for i in recordsPurchased:
+                insert_purchasedItems = f"INSERT INTO purchasedItems(purchaseID, productID) VALUES ({last_id}, {i})"
+                exe_purchasedItems = execute_query(sql_connection, insert_purchasedItems).fetchall()
+                update_quant = f"UPDATE records SET quantity = quantity - 1 WHERE records.productID = {i}"
+                update_quant_query = execute_query(sql_connection, update_quant).fetchall()
+
+        recordsPurchased.clear()
+        return redirect('/purchases')
 
 
 

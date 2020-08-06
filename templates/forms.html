@@ -252,9 +252,19 @@
 {% elif title == 'Add Purchase' %}
 
 <div class="ui container">
-    <form class="ui form">
-        <h3 class="ui dividing header">Add Purchase</h3>
-        
+    <form class="ui form" action="/purchases/add-purchase/final" method="POST">
+        <h3 class="ui dividing header">Select Customer Details for Purchase</h3>
+            <div class="field" id="customer">
+                <label>Customer</label>
+                <select class="ui fluid dropdown" name="customer" required>
+                    <option></option>
+                    {% for customer in customers %}
+                    <option value="{{ customer['customerID'] }}">{{ customer['firstName'] }} {{ customer['lastName'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
             <div class="field">
                     <label>Purchase Date</label>
                     <input type="date" name="purchasedate" placeholder="mm/dd/yyyy">
@@ -264,17 +274,11 @@
                 <label>Method</label>
                 <div class="methodRadios">
                     <label>Card</label>
-                    <input type="radio" name="method" value="card" style="margin-right: 5%;">
+                    <input type="radio" name="method" value="Card" style="margin-right: 5%;">
                     <label>Cash</label>
-                    <input type="radio" name="method" value="cash">
+                    <input type="radio" name="method" value="Cash">
                 </div>
             </div>
-
-        
-            <div class="ui toggle checkbox" style="margin: 20px 0px;">
-                <input type="checkbox" name="public">
-                <label>Payment Confirmed?</label>
-              </div>
             
             <div class="field">
                 <button class="ui primary button" type="submit">Submit</button>
@@ -371,14 +375,14 @@
 
     {% endfor %}
 
-    {% elif customerID %}
+    <!-- {% elif customerID %} -->
 
 
  <script>
-    orderTable = document.getElementById('orderTable')
+    orderTable = document.getElementById('orderTable');
     albumCards = document.getElementsByClassName('ui link cards');
-    orderTotal = document.getElementById('orderTotal')
-    total = 0
+    orderTotal = document.getElementById('orderTotal');
+    total = 0;
     albumCards[0].addEventListener('click', (event) => {
         let target = event.target;
         if(target.id == 'addAlbum'){
@@ -386,8 +390,8 @@
             let quantity = target.dataset.quantity;
             let img = target.dataset.img;
             let title = target.dataset.title;
-            total += Number(price)
-            orderTotal.innerText = `Total Price: ${total}` 
+            total += Number(price);
+            orderTotal.innerText = `Total Price: ${total}`; 
             createRow(title, price, quantity, img);
         }
         
@@ -395,33 +399,33 @@
 
     function createRow(title, price, quantity, img) {
 
-        args = ['title', 'price', 'quantity']
+        args = ['title', 'price', 'quantity'];
         orderRow = document.createElement('tr');
         orderRow.setAttribute('class', 'order-item');
-        imgCell = document.createElement('td')
-        imgCell.setAttribute('id', 'imageData')
-        imgCell.innerHTML = `<img src=${img}>`
+        imgCell = document.createElement('td');
+        imgCell.setAttribute('id', 'imageData');
+        imgCell.innerHTML = `<img src=${img}>`;
         
         orderRow.append(imgCell)
         
         for(var i = 0; i < arguments.length - 1; i++){
             orderCell = document.createElement('td');
             orderInput = document.createElement('input');
-            orderInput.setAttribute('name', `${args[i]}`)
-            orderInput.setAttribute('type', 'hidden')
-            orderInput.setAttribute('value', arguments[i])
+            orderInput.setAttribute('name', `${args[i]}`);
+            orderInput.setAttribute('type', 'hidden');
+            orderInput.setAttribute('value', arguments[i]);
             
             orderCell.innerText = arguments[i];
-            orderCell.append(orderInput)
-            orderRow.append(orderCell)
+            orderCell.append(orderInput);
+            orderRow.append(orderCell);
         }
 
-        orderTable.append(orderRow)
+        orderTable.append(orderRow);
     }
     
     albumCards.addEventListener('click', function(){
-        console.log(addAlbum)
-    })
+        console.log(addAlbum);
+    });
     
 
 </script>
