@@ -278,8 +278,6 @@ def add_purchase_final():
 
 
 
-
-
 # ADD RECORDS
 @app.route('/records/add-record', methods=['POST', 'GET'])
 def add_record():

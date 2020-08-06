@@ -371,8 +371,3 @@ function addInventory(orderId){
         req.send(JSON.stringify(orderId))
         event.preventDefault()
 }
-
-
-
-
-
