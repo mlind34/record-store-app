@@ -261,9 +261,19 @@
 {% elif title == 'Add Purchase' %}
 
 <div class="ui container">
-    <form class="ui form">
-        <h3 class="ui dividing header">Add Purchase</h3>
-        
+    <form class="ui form" action="/purchases/add-purchase/final" method="POST">
+        <h3 class="ui dividing header">Select Customer Details for Purchase</h3>
+            <div class="field" id="customer">
+                <label>Customer</label>
+                <select class="ui fluid dropdown" name="customer" required>
+                    <option></option>
+                    {% for customer in customers %}
+                    <option value="{{ customer['customerID'] }}">{{ customer['firstName'] }} {{ customer['lastName'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
             <div class="field">
                     <label>Purchase Date</label>
                     <input type="date" name="purchasedate" placeholder="mm/dd/yyyy">
@@ -273,17 +283,11 @@
                 <label>Method</label>
                 <div class="methodRadios">
                     <label>Card</label>
-                    <input type="radio" name="method" value="card" style="margin-right: 5%;">
+                    <input type="radio" name="method" value="Card" style="margin-right: 5%;">
                     <label>Cash</label>
-                    <input type="radio" name="method" value="cash">
+                    <input type="radio" name="method" value="Cash">
                 </div>
             </div>
-
-        
-            <div class="ui toggle checkbox" style="margin: 20px 0px;">
-                <input type="checkbox" name="public">
-                <label>Payment Confirmed?</label>
-              </div>
             
             <div class="field">
                 <button class="ui primary button" type="submit">Submit</button>
@@ -384,8 +388,6 @@
     </div>
 
     {% endfor %}
-
-    {% elif customerID %}
 
 {% endif %}
 
