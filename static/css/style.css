@@ -68,6 +68,8 @@
         url(https://images.unsplash.com/photo-1502240868472-18259bc0f863?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=anthony-martino-6AtQNsjMoJo-unsplash.jpg);
         background-size: cover;
         height: 100vh;
+        overflow-y: scroll;
+
         
 }
 
@@ -80,6 +82,8 @@
         url(https://images.unsplash.com/photo-1511735111819-9a3f7709049c?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=natalie-cardona-W8BRzoUTHNA-unsplash.jpg);
         background-size: cover;
         height: 100vh;
+        overflow-y: scroll;
+
 }
 
 .dist-header {
@@ -91,6 +95,8 @@
         url(https://images.unsplash.com/photo-1461360228754-6e81c478b882?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=mr-cup-fabien-barral-o6GEPQXnqMY-unsplash.jpg);
         background-size: cover;
         height: 100vh;
+        overflow-y: scroll;
+
 }
 
 /* MAIN VIEW PAGE TITLES */
@@ -163,9 +169,10 @@ img {
     width: 20%;
 }
 
-.ui.link.cards {
+#orderCards {
     margin-left: 0.5%;
-    padding-top: 15%;
+    margin-right: 20%;
+    padding-top: 7%;
 }
 
 .ui.vertical.text.menu {
@@ -180,5 +187,45 @@ img {
 }
 
 #imageData {
-    width: 55%;
+    width: 10%;
+}
+
+#orderDate {
+    margin: 2% 0% 0% 5%;
+}
+
+#dataTable {
+    margin-bottom: 10%;
+}
+
+.ui.right.rail {
+    left: 72%;
+    padding: 0 0 0 2rem;
+    margin: 18rem 0 0 -11rem;
+    width: 34%;
+    position: fixed;
+}
+
+#orderTitle {
+    text-align: center;
+}
+
+#orderTotal {
+    margin-top: 4%;
+}
+
+div.order-title {
+    display: inline-block;
+    margin-left: 3%;
+    margin-top: 8%;
+    vertical-align: top;
+}
+
+.ui.segment {
+    overflow-y: scroll;
+    height: 50%;
+}
+
+td.table-input.checkbox {
+    padding-left: 3%;
 }

@@ -51,7 +51,7 @@ def update_customer():
         data = request.get_json()
 
         print(data['pageType'])
-        if data['pageType'] == 'customer':
+        if data['pageType'] == 'Customers':
             cust_id = data['id']
             firstName = data['firstName']
             lastName = data['lastName']
@@ -67,7 +67,7 @@ def update_customer():
 
             return redirect('/customers')
 
-        if data['pageType'] == 'distributor':
+        if data['pageType'] == 'Distributors':
             dist_id = data['id']
             name = data['name']
             street = data['street']
@@ -81,6 +81,7 @@ def update_customer():
 
             return redirect('/distributors')
 
+
 # DISTRIBUTORS
 @app.route('/distributors', methods=['POST', 'GET'])
 def show_distributor():
@@ -90,18 +91,9 @@ def show_distributor():
         distributors_query = execute_query(sql_connection, distributors).fetchall()
         return render_template('views.html', distributors=distributors_query, title='Distributors')
 
-    if request.method == 'POST':
-        if request.form['submit_btn'] == 'Delete':
-            distributorID = request.form['distributorID']
-            delete_query = f"DELETE FROM distributors WHERE distributorID={distributorID}"
-            execute_query(sql_connection, delete_query)
-            return redirect('/distributors')
+    
 
-        if request.form['submit_btn'] == 'Update':
-            customerID = request.form['customerID']
-            
-
-            return redirect('/customers')
+        
 
 
 # RECORDS 
@@ -131,7 +123,7 @@ def view_purchases():
 def view_orders():
     sql_connection = connect_to_database()
     if request.method == 'GET':
-        orders = 'SELECT orderDate, orderFilled, distributor FROM orders'
+        orders = 'SELECT orderID, orderDate, orderFilled, distributor, orderTotal FROM orders ORDER BY orderDate desc'
         orders_query = execute_query(sql_connection, orders).fetchall()
         return render_template('views.html', orders=orders_query, title='Orders')
 
@@ -228,14 +220,17 @@ def create_inventory():
            
             if key in response['results'][j] and response['results'][j]['country'] == 'US':
                 title = response['results'][j]['title']
-     
+                title = title.replace('"', '')
+                title = title.split('-')
+                artist = title[0]
+                name = title[1][1:]
                 
                 year = response['results'][j]['year']
                 price = randint(3, 50)
                 quantity = randint(0, 50)
                 img = response['results'][j]['cover_image']
                 
-                insert_inventory = f'INSERT INTO distInventory(distributorID, title, year, price, quantity, img) VALUES ({dist_id}, "{title}", "{year}", {price}, {quantity}, "{img}")'
+                insert_inventory = f'INSERT INTO distInventory(distributorID, artist, name, year, price, quantity, img) VALUES ({dist_id}, "{artist}", "{name}", "{year}", {price}, {quantity}, "{img}")'
                 execute_insert = execute_query(sql_connection, insert_inventory)
     
 
@@ -251,7 +246,7 @@ def view_dist_inventory():
         dist_id = request.form['dist_id']
         sql_connection = connect_to_database()
         
-        inventory_query = f"SELECT title, year, price, quantity, img FROM distInventory WHERE distributorID={dist_id}"
+        inventory_query = f"SELECT name, artist, year, price, quantity, img FROM distInventory WHERE distributorID={dist_id}"
         inventory = execute_query(sql_connection, inventory_query).fetchall()
         
 
@@ -373,16 +368,69 @@ def create_order():
     if request.method == 'POST':
         dist_name = request.form['Distributor']
         print(dist_name)
-        dist_inventory_query = f"SELECT title, year, price, quantity, img FROM distInventory WHERE distributorID=(SELECT distributorID FROM distributors WHERE name='{dist_name}')"
+        dist_inventory_query = f"SELECT inventoryID, distributorID, name, artist, year, price, quantity, img FROM distInventory WHERE distributorID=(SELECT distributorID FROM distributors WHERE name='{dist_name}')"
         dist_inventory = execute_query(sql_connection, dist_inventory_query).fetchall()
         return render_template('forms.html', dist_inventory=dist_inventory, dist_name=dist_name)
 
 # CONFIRM ORDER
 @app.route('/orders/add-order/confirm-order', methods=['GET', 'POST'])
 def confirm_order():
+    sql_connection = connect_to_database()
     if request.method == 'POST':
-        print(request.form)
+        orderData = request.get_json()
+        print(orderData)
+        dist_id = orderData['dist_id']
+        filled = orderData['filled']
+        total = orderData['total']
+        order_query = f"INSERT INTO orders(distributorID, orderDate, orderFilled, distributor, orderTotal) VALUES ({dist_id}, curdate(), {filled}, (SELECT name from distributors WHERE distributorID={dist_id}), {total})"
+        execute_query(sql_connection, order_query)
 
-    return render_template('views.html', title='Order Confirmed')
+        order_q = "SELECT last_insert_id()"
+        order_id = execute_query(sql_connection, order_q).fetchall()
+        order_id = order_id[0]['last_insert_id()']
+        items = orderData['items']
+        
+        # SUBTRACT FROM INVENTORY 
 
+
+        for i in range(len(items)):
+            ordered_items_query = f"INSERT INTO orderedItems(orderID, inventoryID) VALUES ({order_id}, {items[i]})"
+            execute_query(sql_connection, ordered_items_query)
+
+        return redirect('/orders')
+
+# VIEW ORDER
+@app.route('/orders/view-order', methods=['GET', 'POST'])
+def view_order():
+    sql_connection = connect_to_database()
+    if request.method == 'POST':
+        order_id = request.form['order_id']
+
+        items_query = f"SELECT name, artist, price, img FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={order_id}"
+        ordered_items = execute_query(sql_connection, items_query).fetchall()
+        print(ordered_items)
+        return render_template('views.html', ordered_items=ordered_items)
+
+
+
+# ORDER FILLED
+@app.route('/orders/order-filled', methods=['POST', 'GET'])
+def order_filled():
+    sql_connection = connect_to_database()
+    data = request.get_json()
+    if request.method == 'POST':
+        orderID = data['id']
+
+        order_fill_query = f"UPDATE orders SET orderFilled=True WHERE orderID={orderID}"
+
+        execute_query(sql_connection, order_fill_query)
+
+        get_order_items = f"SELECT inventoryID FROM orderedItems WHERE orderID={orderID}"
+
+        get_item_info = f"INSERT INTO records (name, artist, year, price, quantity, distributor) SELECT name, artist, year, price, quantity, (SELECT name FROM distributors d INNER JOIN orders o ON o.distributorID=d.distributorID WHERE orderID={orderID}) FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={orderID}"
+
+        items = execute_query(sql_connection, get_item_info)
+        print(items)
+
+        return redirect('/orders')
 

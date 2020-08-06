@@ -29,6 +29,9 @@
                 <input type="text" name="city" placeholder="City">
             </div>
         </div>
+
+            <div class="two fields">
+
             <div class="field" id="state">
                 <label>State</label>
                 <select class="ui fluid dropdown" name="state">
@@ -86,6 +89,12 @@
                     <option value="WY">Wyoming</option>
                 </select>
             </div>
+            <div class="field" style="width: 15%">
+                <label>Zip Code</label>
+                <input type="text" name="zip" id="zip_code">
+            </div>
+
+        </div>
      
             <div class="two fields">
                 <div class="field">
@@ -307,66 +316,71 @@
 {% elif dist_inventory %}
 
 
-<h1>Order for {{ dist_name }}</h1>
+<h1 id="orderTitle">Order for {{ dist_name }}</h1>
 
-<h2>My Order:</h2>
-<form action="/orders/add-order/confirm-order" method="POST" id="orderForm">
-<table class="ui very basic collapsing celled table" >
-    <thead>
-      <tr><th>Cover</th><th>Title</th>
-      <th>Price</th>
-      <th>Quantity</th>
-    </tr></thead>
+<div class="two feilds">
     
-    
-    <tbody id="orderTable">
-        
-    
-    
-            <tr>
-                <td></td>
-                <td></td>
-                <td><input type="hidden" id="orderTotal" name="total" >Total Price: </td>
-                <td><input type="submit" class="ui primary button" value="Confirm Order"></td>
-                
-            </tr>
-        
-        </tbody>
+        <div class="ui search">
+            <input type="text" class="prompt" placeholder="search inventory...">
+            <i class="search icon"></i>
+        </div>
+        <div class="results"></div>
 
-  </table>
-</form> 
+</div>
 
+<div class="ui right rail" id="myOrder">
+    <div class="ui segment">
+      <h3 id="orderTitle">My Order</h3>
+      <div id="orderTable">
 
-<div class="ui link cards">
+      </div>
+      <div>
+          <h4 id="orderTotal"></h4>
+            <input type="submit" class="ui blue button" id="orderConfirm" value="Place Order">
+      </div>
+    </div>
+</div>
 
-    
+<div class="ui link cards" id="orderCards">
                     
-    {% for i in dist_inventory %}
+    {% for item in dist_inventory %}
+
+    
         
     <div class="card">
       <div class="image" id="albumImage">
-        <img src={{ i['img'] }}>
+        <img src={{ item['img'] }}>
       </div>
       <div class="content">
-        <div class="header" id="albumTitle">{{ i['title'] }}</div>
+        <div class="header" id="albumTitle">{{ item['artist'] }} - {{ item['name'] }}</div>
         <div class="meta">
-          <p id="albumYear">{{ i['year'] }}</p>
+          <p id="albumYear">{{ item['year'] }}</p>
         </div>
         
       </div>
       
       <div class="extra content">
-        <button type="submit" data-price="{{ i['price'] }}" data-quantity="1" 
-        data-title="{{ i['title'] }}" data-img="{{ i['img'] }}" id="addAlbum" class="add-to-order">Add to Order</button>
+        <button type="submit" data-price="{{ item['price'] }}" data-quantity="{{ item['quantity'] }}" 
+        data-id="{{ item['inventoryID'] }}" data-dist_id="{{ item['distributorID'] }}" data-name="{{ item['name'] }}" data-artist="{{ item['artist'] }}" data-img="{{ item['img'] }}" id="addAlbum" class="add-to-order">Add to Order</button>
+
+        <div>
+            <label for="">Select Quantity</label>
+            <select name="" class="ui dropdown">
+            {% for i in range(1, item['quantity'] + 1) %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        
         
         <span id="price">
           <i class="money icon"></i>
-            ${{ i['price'] }}
+            ${{ item['price'] }}
             
         </span>
             
-        <span id="quantity">
-          quantity: {{ i['quantity'] }}
+        <span class="order-quantity" id="{{ item['quantity'] }}">
+          In Stock: {{ item['quantity'] }}
         </span>
         
       </div>
@@ -431,7 +445,6 @@
 </script>
 
 {% endif %}
-
 
 
 {% endblock %}

@@ -33,9 +33,8 @@
             <th>Zip Code</th>
             <th>E-mail address</th>
             <th>Phone Number</th>
-            <th>Delete</th>
-            <th>Update</th>
-            <th>Purchases</th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
         </thead>
@@ -54,14 +53,11 @@
             <td class="table-input" name="email">{{ customer['email'] }}</td>
             <td class="table-input" name="phone">{{ customer['phone'] }}</td>
             
-              <td><input type="hidden" name="customerID" value="{{ customer['customerID'] }}"></td>
+              <td style="display: none"><input type="hidden" name="customerID" value="{{ customer['customerID'] }}"></td>
               <td><input type="submit" value="Delete" id="{{ customer['customerID'] }}" name="submit_btn" class="ui red button"></td>
               <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer['customerID'] }}"></td>
-              <td><input type="submit" value="Update" id="{{ customer['customerID'] }}" name="submit_btn" class="ui teal button" ></td>
             </form>
-              
-              
-          
+              <td><input type="submit" onclick="updateFunc(this)" value="Update" id="{{ customer['customerID'] }}" name="submit_btn" class="ui teal button" ></td>
 
         </tr>
 
@@ -101,32 +97,33 @@
                 <th>State</th>
                 <th>Zip Code</th>
                 <th>Phone Number</th>
-                <th>Delete</th>
-                <th>Update</th>
                 <th></th>
                 <th></th>
                 <th></th>
+                
             </tr>
             </thead>
             <tbody>
 
                 {% for distributor in distributors %}
                 <tr id="{{ distributor['distributorID'] }}" name='distributor'>
-                  <form action="/distributors" method='POST'></form>
+                  
                 <td class="table-input" name="name">{{ distributor['name'] }}</td>
                 <td class="table-input" name="street">{{ distributor['street'] }}</td>
                 <td class="table-input" name="city">{{ distributor['city'] }}</td>
                 <td class="table-input" name="state">{{ distributor['state'] }}</td>
                 <td class="table-input" name="zip">{{ distributor['zip'] }}</td>
                 <td class="table-input" name="phone">{{ distributor['phone'] }}</td>
-                <td><input type="submit" value="Delete" class="ui red button"></td>
-                <td><input type="submit" value="Update" class="ui teal button" id="{{ distributor['distributorID'] }}"></td>
-                </form>
+                
+                <td><input type="submit" onclick="updateFunc(this)" name="update_btn" value="Update" class="ui teal button update-btn" id="{{ distributor['distributorID'] }}"></td>
 
-                <form action="/distributors/view-inventory" method="POST">
-                  <td><input type="hidden" name="dist_id" value="{{ distributor['distributorID'] }}"></td>
-                  <td><input type="hidden" name="dist_name" value="{{ distributor['name'] }}"></td>
-                  <td><input type="submit" class="ui teal button" value="View Inventory"></td>
+                  
+                
+                <form action="distributors/view-inventory" method="POST">
+                  <td style="display: none"><input type="hidden"  name="dist_id" value="{{ distributor['distributorID'] }}"></td>
+                  <td style="display: none"><input type="hidden"  name="dist_name" value="{{ distributor['name'] }}"></td>
+
+                  <td><input type="submit" class="ui blue button" value="View Inventory"></td>
                 </form>
             </tr>
             {% endfor %}
@@ -173,9 +170,7 @@
         <th>Artist</th>
         <th>Name</th>
         <th>Distributor</th>
-        {% if records %}
-        <th>Update</th>
-        {% endif %}
+        
         {% if recordsPurch %}
         <th>Add</th>
         {% endif %}
@@ -192,7 +187,6 @@
           <td class="table-input">{{ record['artist'] }}</td>
           <td class="table-input">{{ record['name'] }}</td>
           <td class="table-input">{{ record['distributor'] }}</td>
-          <td><input class="ui teal button" type="submit" value="Update" id="{{ record['productID'] }}"></td>
       </tr>
       {% endfor %}
       {% for record in recordsPurch %}
@@ -274,34 +268,43 @@
     </div>
 </div>
 
-<table class="ui striped table order-table" id="dataTable">
+<table class="ui striped table order-table" id="distOrderTable">
     <thead>
       <tr>
         <th>Distributor</th>
         <th>Order Date</th>
         <th>Order Filled</th>
+        <th>Order Total</th>
         <th>View Items</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody >
       
       {% for order in orders %}
       <tr id="{{ order.order_id }}">
           
           <td class="table-input">{{ order['distributor'] }}</td>
           <td class="table-input">{{ order['orderDate'] }}</td>
-          {% if order['orderFilled'] == True %}
-          <td class="ui checkbox">
-            <input type="checkbox" name="public" checked='True'>
-            <label></label>
+
+        {% if order['orderFilled'] == False %}
+        <form action="/orders/order-filled" method="POST">
+          <td class="table-input checkbox">
+            <input type="checkbox" class="ui checkbox" name="free" value="{{ order['orderID'] }}" name="public">
           </td>
-            {% else %}
-            <td class="ui checkbox">
-              <input type="checkbox" name="public">
-              <label></label>
-            </td>
-          {% endif %}
-          <td><input type="submit" value="View Items" class="ui teal button" id="{{ order.id }}"></td>
+        </form>
+        {% else %}
+        <td class="table-input checkbox">
+          <input type="checkbox" class="ui checkbox" checked="True" disabled="True">
+        </td>
+        {% endif %}
+            
+          <td class="table-input">${{ order['orderTotal'] }}</td>
+          
+          <form action="/orders/view-order" method="POST">
+            <input style="display: none" type="hidden" name="order_id" value="{{ order['orderID'] }}">
+            <td><input type="submit" value="View Items" class="ui teal button"></td>
+            
+          </form>
           
       </tr>
       {% endfor %}
@@ -367,7 +370,7 @@
       <img src={{ i['img'] }}>
     </div>
     <div class="content">
-      <div class="header" id="albumTitle">{{ i['title'] }}</div>
+      <div class="header" id="albumTitle">{{ i['artist'] }} - {{ i['name'] }}</div>
       <div class="meta">
         <p id="albumYear">{{ i['year'] }}</p>
       </div>
@@ -393,8 +396,12 @@
   {% endfor %}
 
 
- {% elif title == 'Order Confirmed'%}
-  <h1>Order Confirmed</h1>
+ {% elif ordered_items %}
+  {% for item in ordered_items %}
+    <h2>{{ item['artist'] }} - {{ item['name'] }}</h2>
+    <img src="{{item['img']}}">
+    <h2>${{ item['price'] }}</h2>
+    {% endfor %}
 
 
 {% elif purchaseItems %}
