@@ -21,7 +21,7 @@ CREATE TABLE `purchases` (
   `paymentMethod` varchar(255) NOT NULL,
   `totalPrice` DEC(65, 2) NOT NULL,
   PRIMARY KEY (`purchaseID`),
-  FOREIGN KEY (`customerID`) REFERENCES `customers`(`customerID`)
+  FOREIGN KEY (`customerID`) REFERENCES `customers`(`customerID`) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 

@@ -66,9 +66,18 @@ UPDATE orders SET orderFilled = :filled_checkbox;
 
 
 -- ADD ORDER PAGE
-INSERT INTO orders (distributorID, orderDate, orderFilled, distributor)
-    VALUES (SELECT distributorID FROM distributors where name = :distributor_name_dropdown, orderDate, orderFilled, distributor)
+INSERT INTO orders(distributorID, orderDate, orderFilled, distributor, orderTotal) VALUES ({dist_id}, curdate(), {filled}, (SELECT name from distributors WHERE distributorID={dist_id}), {total})
 
+
+-- Inserts into relationship table
+INSERT INTO orderedItems(orderID, inventoryID) VALUES ({order_id}, {items[i]})
+
+
+-- ORDER FILLED (when order is filled, records are added to the records inventory page)
+INSERT INTO records (name, artist, year, price, quantity, distributor) SELECT name, artist, year, price, quantity, (SELECT name FROM distributors d INNER JOIN orders o ON o.distributorID=d.distributorID WHERE orderID={orderID}) FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={orderID}
+
+-- Ordered Items for a specific order
+SELECT name, artist, price, img FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={order_id}
 
 -- 
 -- PURCHASES PAGE
@@ -80,3 +89,8 @@ SELECT purchaseDate, paymentMethod, totalPrice FROM purchases;
 INSERT INTO purchases (customerID, paymentMethod, totalPrice)
     VALUES (SELECT customerID from customers WHERE firstName = :firstName_text_input AND lastName = :lastName_text_input AND phone = :phone_text_input)
     
+
+-- Returns purchased items for a given customer
+SELECT name, artist, year, price, distributor FROM records INNER JOIN \
+        purchasedItems ON purchasedItems.productID = records.productID INNER JOIN purchases ON purchases.purchaseID = purchasedItems.purchaseID \
+        WHERE purchases.purchaseID = {purch_id}

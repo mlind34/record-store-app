@@ -44,7 +44,7 @@
           recordIDs: recordsAdded
           };
           let subReq = new XMLHttpRequest();
-          subReq.open("ADD", "http://flip3.engr.oregonstate.edu:5199/purchases/add-purchase/final", true);
+          subReq.open("ADD", "http://flip1.engr.oregonstate.edu:4378/purchases/add-purchase/final", true);
           subReq.setRequestHeader("content-type", "application/json");
           subReq.addEventListener("load", () => {
               window.location.href = '/purchases/add-purchase/final'
