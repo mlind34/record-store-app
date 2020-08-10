@@ -15,22 +15,69 @@
 
 </head>
 <body>
-    <div class="ui menu" id="navbar">
+
+  <div class="ui menu" id="navbar">
+    <a class="item" href="/home">
+      <i class="home icon"></i> Home
+    </a>
+    
+    
+    <div class="right menu">
+      
+      <div class="ui simple dropdown item">
+        Customers
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="/customers">View Customers</a>
+          <a class="item" href="/purchases">View Purchases</a>
+          <a class="item" href="/purchases/add-purchase">Add Purchase</a>
+          <a class="item" href="/customers/add-customer">Add a Customer</a>
+        </div>
+      </div>
+      <div class="ui simple dropdown item">
+        Distributors
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="/distributors">View Distributors</a>
+          <a class="item" href="/distributors/add-distributor">Add Distributor</a>
+          <a class="item" href="/orders">View Orders</a>
+          <a class="item" href="/orders/add-order/select-distributor">Create an Order</a>
+        </div>
+      </div>
+      <div class="ui simple dropdown item">
+        Records
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="/records">View Records</a>
+          <a class="item" href="/records/add-record">Add a Record</a>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- <div class="ui menu" id="navbar">
         
           <a class="active item" href="/home">
             Home
           </a>
           <div class="right menu">
-            <a class="right item" href="/customers">
-              Customers
-            </a>
-            <a class="item" href="/distributors">
+              <div class="ui dropdown item">
+                Customers
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                  <a class="item">Add Customer</a>
+                  <a href=""></a>
+                </div>
+              </div>
+          </div> -->
+               
+            
+            <!-- <a class="item" href="/distributors">
               Distributors
             </a>
             <a class="item" href="/records">
               Records
             </a>
-        </div>
+        </div> -->
       
         
       </div>

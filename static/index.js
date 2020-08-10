@@ -47,7 +47,7 @@
             data.id = buttons2[i].id;  
           }
           let subReq = new XMLHttpRequest();
-          subReq.open("ADD", "http://flip3.engr.oregonstate.edu:5199/purchases/add-purchase/final", true);
+          subReq.open("ADD", "http://flip1.engr.oregonstate.edu:4380/purchases/add-purchase/final", true);
           subReq.setRequestHeader("content-type", "application/json");
           subReq.addEventListener("load", () => {
               data = JSON.parse(data);
@@ -238,10 +238,11 @@ function updateRequest(postData){
 
 // CREATE ORDER FUNCTIONS
   orderTable = document.getElementById('orderTable')
-  console.log(orderTable)
   albumCards = document.getElementsByClassName('ui link cards');
   orderTotal = document.getElementById('orderTotal')
-  total = 0
+ 
+  
+  let total = 0
   if(albumCards[0] != null){
   albumCards[0].addEventListener('click', (event) => {
       let target = event.target; 
@@ -250,6 +251,7 @@ function updateRequest(postData){
           if (target.dataset.quantity == 0){
               return
           }
+          itemQuantity  = target.closest('div').getElementsByClassName('ui dropdown selection')[0].outerText
           let product_id = target.dataset.id;
           let dist_id = target.dataset.dist_id;
           let price = target.dataset.price
@@ -257,20 +259,24 @@ function updateRequest(postData){
           let img = target.dataset.img;
           let artist = target.dataset.artist;
           let name = target.dataset.name
-          total += Number(price);
+          
+        
+          total += Number(price * itemQuantity);
+          console.log(itemQuantity)
           orderTotal.innerText = `Total Price: $${total}`; 
-          createRow(artist, name, product_id, dist_id, img);
+          createRow(artist, name, product_id, dist_id, img, itemQuantity);
       }
       
   })
 }
 
-  function createRow(artist, name, product_id, dist_id, img) {
+  function createRow(artist, name, product_id, dist_id, img, itemQuantity) {
       // IMAGE
       orderRow = document.createElement('div');
       orderRow.setAttribute('class', 'order-item');
-      orderRow.setAttribute('data-product_id', `${product_id}`)
-      orderRow.setAttribute('data-dist_id', `${dist_id}`)
+      orderRow.setAttribute('data-product_id', `${product_id}`);
+      orderRow.setAttribute('data-dist_id', `${dist_id}`);
+      orderRow.setAttribute('data-quantity', `${itemQuantity}`);
       imgCell = document.createElement('span');
       imgCell.setAttribute('id', 'imageData');
       imgCell.innerHTML = `<img src=${img}>`;
@@ -281,6 +287,11 @@ function updateRequest(postData){
       orderTitle.setAttribute('class', 'order-title');
       orderTitle.innerText = `${artist} - ${name}`
       imgCell.append(orderTitle)
+
+      orderQuantity = document.createElement('div');
+      orderQuantity.setAttribute('class', 'order-quantity');
+      orderQuantity.innerText = ` - ${itemQuantity}`;
+      orderTitle.append(orderQuantity)
       
       
 
@@ -296,21 +307,25 @@ document.addEventListener('DOMContentLoaded', function(){
   if(ordConfirm != null){
   ordConfirm.addEventListener('click', function(){
       let orderItems = document.getElementsByClassName('order-item')
-      let order_ids = []
+      let items = []
       for(let i = 0; i < orderItems.length; i++){
-          order_ids.push(orderItems[i].dataset.product_id)
+          item = {
+              'quantity': orderItems[i].dataset.quantity,
+              'id': orderItems[i].dataset.product_id
+          }
+          items.push(item)
       }
       let dist_id = orderItems[0].dataset.dist_id
       orderData = {
           dist_id: null,
           filled: null,
-          items: null,
-          total: null
+          total: null,
+          items: null
       }
       orderData.dist_id = dist_id
       orderData.filled = false
-      orderData.items = order_ids
       orderData.total = total
+      orderData.items = items
       orderRequest(orderData)
   })
 }
@@ -320,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function(){
 function orderRequest (orderData) {
   let req = new XMLHttpRequest()
  
-  req.open("POST", "http://flip1.engr.oregonstate.edu:3457/orders/add-order/confirm-order", true);
+  req.open("POST", "http://flip1.engr.oregonstate.edu:4380/orders/add-order/confirm-order", true);
       req.setRequestHeader("content-type", "application/json");
       req.addEventListener("load", () => {
           if (req.status >= 200 && req.status < 400){
@@ -336,37 +351,49 @@ function orderRequest (orderData) {
 }
 
 
-// ORDER FILLED FUNCTION
+// ORDERS FILLED FUNCTION
 
 distOrderTable = document.getElementById('distOrderTable')
 if(distOrderTable != null){
-distOrderTable.addEventListener('change', (event) => {
-  let checkbox = event.target
-  checkbox.checked = true
-  checkbox.disabled= true
-  console.log(checkbox.value)
-  orderId = {id: null}
-  orderId.id = checkbox.value
+    orders = []
+    distOrderTable.addEventListener('change', (event) => {
+    let checkbox = event.target
+    order_info = {
+        order_id: checkbox.dataset.id,
+        distributor_id: checkbox.dataset.dist
+    }
+    orders.push(order_info)
+    console.log(orders)
+    addOrders = {
+        orders: null
+    }
+    addOrders.orders = orders
+    fillOrder(addOrders)
+    })
+}
 
-  addInventory(orderId)
+function fillOrder(addOrders){
+let fillOrder = document.getElementById('fillOrder');
+fillOrder.addEventListener('click', function(){
+    addInventory(addOrders)
 })
 }
 
-function addInventory(orderId){
+function addInventory(addorders){
   let req = new XMLHttpRequest()
  
-  req.open("POST", "/orders/order-filled", true);
+  req.open("POST", "/orders/fill-orders", true);
       req.setRequestHeader("content-type", "application/json");
       req.addEventListener("load", () => {
           if (req.status >= 200 && req.status < 400){
-              console.log('works')
+              window.location.href = '/records'
               
           } else {
               console.log('error in network request' + req.statusText)
           }
       });
 
-      req.send(JSON.stringify(orderId))
+      req.send(JSON.stringify(addorders))
       event.preventDefault()
 }
 

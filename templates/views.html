@@ -3,6 +3,7 @@
 
 <!-- CUSTOMERS VIEW -->
 {% if customers %}
+<h1>test</h1>
 
 <div class="customer-header">
     <h1 id="viewTitle">Customers</h1>
@@ -269,7 +270,8 @@
 
   <!-- ORDERS VIEW -->
   {% elif orders %}
-  <h1 id="genericTitle">Distributor Orders</h1>
+  <h1 id="genericTitle">All Open Orders</h1>
+  <h2 id="genericTitle">Check Orders to Fill and Click Add To Inventory</h2>
 
   <div class="btn-wrapper">
     <div class="add-btn">
@@ -277,12 +279,16 @@
             <input type="submit" class="big ui primary button" value="Add Order">
         </form>
     </div>
-</div>
+        <div class="view-btn">
+        <input type="submit" class="big ui primary button order-fill" value="Add To Inventory" id="fillOrder"></form>
+          </div>
+  </div>
 
 <table class="ui striped table order-table" id="distOrderTable">
     <thead>
       <tr>
         <th>Distributor</th>
+        <th>Order #</th>
         <th>Order Date</th>
         <th>Order Filled</th>
         <th>Order Total</th>
@@ -295,12 +301,13 @@
       <tr id="{{ order.order_id }}">
           
           <td class="table-input">{{ order['distributor'] }}</td>
+          <td class="table-input">{{ order['orderID'] }}</td>
           <td class="table-input">{{ order['orderDate'] }}</td>
 
         {% if order['orderFilled'] == False %}
         <form action="/orders/order-filled" method="POST">
-          <td class="table-input checkbox">
-            <input type="checkbox" class="ui checkbox" name="free" value="{{ order['orderID'] }}" name="public">
+          <td class="table-input checkbox" >
+            <input type="checkbox" class="ui checkbox" data-tooltip="check to mark as received" data-position="right center" data-id="{{ order['orderID'] }}" data-dist="{{ order['distributorID'] }}">
           </td>
         </form>
         {% else %}
@@ -408,12 +415,23 @@
   {% endfor %}
 
 
+
+
+
+
  {% elif ordered_items %}
   {% for item in ordered_items %}
     <h2>{{ item['artist'] }} - {{ item['name'] }}</h2>
     <img src="{{item['img']}}">
     <h2>${{ item['price'] }}</h2>
+    <h3>Quantity - {{ item['quantity'] }}</h3>
     {% endfor %}
+
+
+
+
+
+
 
 
 {% elif purchaseItems %}

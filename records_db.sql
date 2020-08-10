@@ -61,7 +61,7 @@ CREATE TABLE `orders` (
   `orderDate` DATE NOT NULL,
   `orderFilled` BOOLEAN NOT NULL,
   `distributor` varchar(255),
-  `orderTotal` int,
+  `orderTotal` DEC(5, 2),
   PRIMARY KEY (`orderID`),
   FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -73,7 +73,7 @@ CREATE TABLE `distInventory` (
   `artist` varchar(255),
   `name` varchar(255),
   `year` YEAR,
-  `price` int,
+  `price` DEC(5, 2),
   `quantity` int,
   `img` varchar(1000),
   PRIMARY KEY (`inventoryID`),
@@ -99,6 +99,7 @@ CREATE TABLE `orderedItems` (
     `orderedItemID` int NOT NULL AUTO_INCREMENT,
     `orderID` int,
     `inventoryID` int,
+    `quantity` int,
     PRIMARY KEY (`orderedItemID`),
     FOREIGN KEY (`orderID`) REFERENCES `orders` (`orderID`),
     FOREIGN KEY (`inventoryID`) REFERENCES `distInventory` (`inventoryID`)
