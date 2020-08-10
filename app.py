@@ -3,12 +3,16 @@ import requests
 import random
 import gevent
 import subprocess
+import json
+
 from random import randint
 from db_connect import connect_to_database, execute_query
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+
 
 
 # 
@@ -32,6 +36,7 @@ def show_customer():
     if request.method == 'GET':
         customers = 'SELECT customerID, firstName, lastName, street, city, state, zip, phone, email FROM customers'
         customers_query = execute_query(sql_connection, customers).fetchall()
+        print(customers_query)
         return render_template('views.html', customers=customers_query, title='Customers')
     
     if request.method == 'POST':
@@ -123,9 +128,9 @@ def view_purchases():
 def view_orders():
     sql_connection = connect_to_database()
     if request.method == 'GET':
-        orders = 'SELECT orderID, orderDate, orderFilled, distributor, orderTotal FROM orders ORDER BY orderDate desc'
-        orders_query = execute_query(sql_connection, orders).fetchall()
-        return render_template('views.html', orders=orders_query, title='Orders')
+        orders_query = "SELECT orderID, orderDate, distributor, distributorID, orderFilled, orderTotal FROM orders ORDER BY orderID desc" 
+        orders = execute_query(sql_connection, orders_query).fetchall()
+        return render_template('views.html', orders=orders, title='Orders')
 
 
 # Use this or repurpose existing Purchases page for individual customer puchase SELECT
@@ -217,16 +222,19 @@ def create_inventory():
         
         for j in range(0, 20):
             key = 'year'
-           
+            key2 = 'results'
             if key in response['results'][j] and response['results'][j]['country'] == 'US':
                 title = response['results'][j]['title']
                 title = title.replace('"', '')
+                title = title.replace("'","")
+                title = title.encode('ascii', 'ignore').decode('ascii')
                 title = title.split('-')
                 artist = title[0]
                 name = title[1][1:]
                 
                 year = response['results'][j]['year']
-                price = randint(3, 50)
+                price = random.randint(350, 5000)/100
+                print(price)
                 quantity = randint(0, 50)
                 img = response['results'][j]['cover_image']
                 
@@ -364,7 +372,8 @@ def select_dist():
 def create_order():
     sql_connection = connect_to_database()
     if request.method == 'POST':
-        dist_name = request.form['Distributor']
+        print(request.form)
+        dist_name = request.form['distributor']
         print(dist_name)
         dist_inventory_query = f"SELECT inventoryID, distributorID, name, artist, year, price, quantity, img FROM distInventory WHERE distributorID=(SELECT distributorID FROM distributors WHERE name='{dist_name}')"
         dist_inventory = execute_query(sql_connection, dist_inventory_query).fetchall()
@@ -387,13 +396,17 @@ def confirm_order():
         order_id = execute_query(sql_connection, order_q).fetchall()
         order_id = order_id[0]['last_insert_id()']
         items = orderData['items']
-        
+        print(items)
+
+
         # SUBTRACT FROM INVENTORY 
 
-
         for i in range(len(items)):
-            ordered_items_query = f"INSERT INTO orderedItems(orderID, inventoryID) VALUES ({order_id}, {items[i]})"
+            ordered_items_query = f"INSERT INTO orderedItems(orderID, inventoryID, quantity) VALUES ({order_id}, {items[i]['id']}, {items[i]['quantity']})"
             execute_query(sql_connection, ordered_items_query)
+
+            update_dist_query = f"UPDATE distInventory SET quantity=quantity-{items[i]['quantity']} WHERE inventoryID={items[i]['id']}"
+            execute_query(sql_connection, update_dist_query)
 
         return redirect('/orders')
 
@@ -404,31 +417,47 @@ def view_order():
     if request.method == 'POST':
         order_id = request.form['order_id']
 
-        items_query = f"SELECT name, artist, price, img FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={order_id}"
+        items_query = f"SELECT d.name, d.artist, d.price, d.img, o.quantity FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={order_id}"
         ordered_items = execute_query(sql_connection, items_query).fetchall()
+
         print(ordered_items)
+
         return render_template('views.html', ordered_items=ordered_items)
 
 
 
 # ORDER FILLED
-@app.route('/orders/order-filled', methods=['POST', 'GET'])
-def order_filled():
+@app.route('/orders/fill-orders', methods=['POST', 'GET'])
+def fill_orders():
     sql_connection = connect_to_database()
     data = request.get_json()
     if request.method == 'POST':
-        orderID = data['id']
+        orders = data['orders']
+        records = []
+        print(orders)
+        for i in range(len(orders)):
+            
+            order_info_query = f"SELECT d.inventoryID, d.name, d.artist, d.price, d.year, (SELECT name from distributors WHERE distributorID={orders[i]['distributor_id']}) AS distributor, o.quantity FROM distInventory d \
+            INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={orders[i]['order_id']} "
 
-        order_fill_query = f"UPDATE orders SET orderFilled=True WHERE orderID={orderID}"
+            # order_filled = f"UPDATE orders SET orderFilled=True WHERE orderID={orders[i]['order_id']}"
+            # execute_query(sql_connection, order_filled)
 
-        execute_query(sql_connection, order_fill_query)
+            record_info = execute_query(sql_connection, order_info_query).fetchall()
 
-        get_order_items = f"SELECT inventoryID FROM orderedItems WHERE orderID={orderID}"
+            records += [record_info]
 
-        get_item_info = f"INSERT INTO records (name, artist, year, price, quantity, distributor) SELECT name, artist, year, price, quantity, (SELECT name FROM distributors d INNER JOIN orders o ON o.distributorID=d.distributorID WHERE orderID={orderID}) FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={orderID}"
+        print("-----------------TEST---------------------")
+        for i in range(len(records)):
+            print(records[i])
+            add_records_query = f"INSERT INTO records (productID, price, name, artist, year, distributor, quantity)\
+             VALUES ({records[i]['inventoryID']}, {records[i]['price']}, '{records[i]['name']}', \
+            '{records[i]['artist']}', '{records[i]['year']}', '{records[i]['distributor']}', {records[i]['quantity']}) \
+            ON DUPLICATE KEY UPDATE SET quantity=quantity+{records[i]['quantity']}"
 
-        items = execute_query(sql_connection, get_item_info)
-        print(items)
+            execute_query(sql_connection, add_records_query)
 
-        return redirect('/orders')
+            
+    
+        return redirect('/records')
 

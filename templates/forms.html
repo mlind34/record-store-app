@@ -298,20 +298,22 @@
 <!-- CREATE ORDER FORM -->
 {% elif distributor_order %}
 
-    <h1>New Order</h1>
+    <!-- <div class="ui container dist-select"> -->
+    <h1 id="newOrderTitle">Select a Distributor</h1>
 
-    <label for="">Select a Distributor</label>
     <form action="/orders/add-order/create-order" method="POST">
-        <select name="Distributor" class="ui dropdown" id="">
-            <option value="">Distributors</option>
+        <select name="distributor" class="ui search dropdown">
+           <option value="">Distributors</option>
             {% for distributor in distributor_order %}
             
             <option value="{{ distributor['name'] }}">{{ distributor['name'] }}</option>
 
             {% endfor %}
         </select>
-        <input type="submit" value="Create Order">
+        <button type="submit" class="ui blue button" id="beginOrder">Begin Your Order</button>
     </form>
+    
+    <!-- </div> -->
 
 {% elif dist_inventory %}
 
@@ -321,7 +323,7 @@
 <div class="two feilds">
     
         <div class="ui search">
-            <input type="text" class="prompt" placeholder="search inventory...">
+            <input type="text" class="prompt" id="orderSearch" placeholder="search inventory...">
             <i class="search icon"></i>
         </div>
         <div class="results"></div>
@@ -360,28 +362,28 @@
       </div>
       
       <div class="extra content">
-        <button type="submit" data-price="{{ item['price'] }}" data-quantity="{{ item['quantity'] }}" 
-        data-id="{{ item['inventoryID'] }}" data-dist_id="{{ item['distributorID'] }}" data-name="{{ item['name'] }}" data-artist="{{ item['artist'] }}" data-img="{{ item['img'] }}" id="addAlbum" class="add-to-order">Add to Order</button>
-
-        <div>
-            <label for="">Select Quantity</label>
-            <select name="" class="ui dropdown">
+        
+        <span id="price">
+            <i class="money icon"></i>
+              ${{ item['price'] }}
+              
+          </span>
+              
+          <span class="order-quantity" id="{{ item['quantity'] }}">
+            In Stock: {{ item['quantity'] }}
+          </span>
+        
+        
+            <div style="text-align: right; float: right;">
+            <select name="" class="ui dropdown order" style="margin-top: 10%; margin-right: 34%;">
             {% for i in range(1, item['quantity'] + 1) %}
                 <option value="{{ i }}">{{ i }}</option>
             {% endfor %}
             </select>
-        </div>
+            </div>
         
-        
-        <span id="price">
-          <i class="money icon"></i>
-            ${{ item['price'] }}
-            
-        </span>
-            
-        <span class="order-quantity" id="{{ item['quantity'] }}">
-          In Stock: {{ item['quantity'] }}
-        </span>
+            <button style="margin-top: 10%;" class="record-info" type="submit" data-price="{{ item['price'] }}" data-quantity="{{ item['quantity'] }}" 
+            data-id="{{ item['inventoryID'] }}" data-dist_id="{{ item['distributorID'] }}" data-name="{{ item['name'] }}" data-artist="{{ item['artist'] }}" data-img="{{ item['img'] }}" id="addAlbum" class="add-to-order">Add to Order</button>
         
       </div>
       
@@ -390,6 +392,12 @@
     {% endfor %}
 
 {% endif %}
+<script>
+    $('.ui.dropdown').dropdown();
 
+    $('#search-select')
+  .dropdown()
+;
+</script>
 
 {% endblock %}
