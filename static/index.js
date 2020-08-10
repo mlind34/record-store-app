@@ -41,13 +41,22 @@
       if(buttons2[i].value == 'Submit Records for Order') {
       buttons2[i].addEventListener("click", (event) => {
           data = {
-          recordIDs: recordsAdded
+          recordIDs: recordsAdded,
           };
+          if(buttons2[i].hasAttribute('id')) {
+            data.id = buttons2[i].id;  
+          }
           let subReq = new XMLHttpRequest();
-          subReq.open("ADD", "http://flip1.engr.oregonstate.edu:4378/purchases/add-purchase/final", true);
+          subReq.open("ADD", "http://flip3.engr.oregonstate.edu:5199/purchases/add-purchase/final", true);
           subReq.setRequestHeader("content-type", "application/json");
           subReq.addEventListener("load", () => {
-              window.location.href = '/purchases/add-purchase/final'
+              data = JSON.parse(data);
+              if('id' in data) {
+                  console.log("TES");
+                window.location.href = '/purchases/add-purchase/final/'+data.id;
+              } else {
+                window.location.href = '/purchases/add-purchase/final'; 
+              }
           })
           data = JSON.stringify(data);
           subReq.send(data);
@@ -360,3 +369,27 @@ function addInventory(orderId){
       req.send(JSON.stringify(orderId))
       event.preventDefault()
 }
+
+
+function filterRecords(){
+  let searchBar = document.getElementById("searchbar");
+  console.log(searchBar);
+  if(searchBar) {
+    searchBar.addEventListener('keyup', (event) => {
+        let curRows = document.querySelectorAll('tr');
+        searchBarText = searchBar.value.toUpperCase();
+        for (let i = 1; i<curRows.length; i++) {
+            // rowArtist = curRows[i].cells[3].innerText.toUpperCase();
+            // console.log(rowArtist);
+            if(curRows[i].cells[3].innerText.toUpperCase().includes(searchBarText)) {
+              curRows[i].style.display = "table-row";
+            } else if (curRows[i].cells[4].innerText.toUpperCase().includes(searchBarText)) {
+                curRows[i].style.display = "table-row";  
+            } else {
+                curRows[i].style.display = "none";  
+            }
+       }
+    });
+   }
+}
+filterRecords();

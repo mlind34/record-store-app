@@ -112,7 +112,8 @@ def show_records():
 def view_purchases():
     sql_connection = connect_to_database()
     if request.method == 'GET':
-        purchases = 'SELECT purchaseID, purchaseDate, paymentMethod, totalPrice FROM purchases'
+        purchases = 'SELECT purchases.purchaseID, purchases.purchaseDate, purchases.paymentMethod, purchases.totalPrice, \
+        customers.firstName, customers.lastName FROM purchases INNER JOIN customers ON customers.customerID = purchases.customerID'
         purchases_query = execute_query(sql_connection, purchases).fetchall()
         return render_template('views.html', purchases=purchases_query, title='Purchases')
 
@@ -266,35 +267,54 @@ def show_items():
     return render_template('views.html', purchaseItems=items_query)
 
 # ADD PURCHASE
-@app.route('/purchases/add-purchase', methods=['POST', 'GET'])
-def add_purchase():
+@app.route('/purchases/add-purchase', defaults={'cust': None}, methods=['POST', 'GET'])
+@app.route('/purchases/add-purchase/<cust>', methods=['POST', 'GET'])
+def add_purchase(cust):
     sql_connection = connect_to_database()
     # if request.method == 'POST':
     records = 'SELECT productID, name, artist, year, price, quantity, distributor FROM records'
     records_query = execute_query(sql_connection, records).fetchall()
-    return render_template('views.html', recordsPurch=records_query, title='recordsPurch')
+    return render_template('views.html', recordsPurch=records_query, title='recordsPurch', id=cust)
 
 recordsPurchased = []
 
 # after records have been selected for a purchase
-@app.route('/purchases/add-purchase/final', methods=['POST', 'GET', 'ADD'])
-def add_purchase_final():
+@app.route('/purchases/add-purchase/final', defaults={'cust': None}, methods=['POST', 'GET', 'ADD'])
+@app.route('/purchases/add-purchase/final/<cust>', methods=['POST', 'GET', 'ADD'])
+def add_purchase_final(cust):
     sql_connection = connect_to_database()
+    customerID = None
     if request.method == 'ADD':
         recordsPurchased.clear()
         data = request.get_json()
         recordArray = data['recordIDs']
+        if 'id' in data:
+            customerID = int(data['id'])
         recordArray = [int(i) for i in recordArray]
         if recordArray:
             for i in recordArray:
                 recordsPurchased.append(i)
-            return render_template('forms.html', title='Add Purchase')
+            if customerID is None:
+                # this return is for javascript function
+                return render_template('forms.html', title='Add Purchase')
+            else:
+                # customer_query = f'SELECT customerID, firstName, lastName FROM customers \
+                # WHERE customerID = {customerID}'
+                # get_customers = execute_query(sql_connection, customer_query).fetchall()
+                return render_template('forms.html', title='Add Purchase')
+
     
     if request.method == 'GET':
         if recordsPurchased:
-            customers = "SELECT customerID, firstName, lastName FROM customers"
-            customers_query = execute_query(sql_connection, customers).fetchall()
-            return render_template('forms.html', title='Add Purchase', customers=customers_query)
+            if cust is None:
+                customers = "SELECT customerID, firstName, lastName FROM customers"
+                customers_query = execute_query(sql_connection, customers).fetchall()
+                return render_template('forms.html', title='Add Purchase', customers=customers_query) 
+            else:
+                customer = f"SELECT customerID, firstName, lastName FROM customers WHERE \
+                    customerID = {int(cust)}"
+                customer_query = execute_query(sql_connection, customer).fetchall()
+                return render_template('forms.html', title='Add Purchase', customer=customer_query)
         else:
             return redirect('/purchases/add-purchase')
     
@@ -324,6 +344,8 @@ def add_purchase_final():
 
         recordsPurchased.clear()
         return redirect('/purchases')
+
+
 
 
 

@@ -57,6 +57,9 @@
               <td><input type="submit" value="Delete" id="{{ customer['customerID'] }}" name="submit_btn" class="ui red button"></td>
               <td><input type="submit" value="Purchases" class="ui blue button" id="{{ customer['customerID'] }}"></td>
             </form>
+              <form action="/purchases/add-purchase/{{ customer['customerID'] }}">
+                  <td><input type="submit" class="ui blue button" value="Add Purchase"></td>
+              </form>
               <td><input type="submit" onclick="updateFunc(this)" value="Update" id="{{ customer['customerID'] }}" name="submit_btn" class="ui teal button" ></td>
 
         </tr>
@@ -151,13 +154,17 @@
         </form>
         {% endif %}
             {% if recordsPurch %}
-            <input type="submit" class="big ui primary button" value="Submit Records for Order">
+              {% if id %}
+                <input type="submit" class="big ui primary button" value="Submit Records for Order" id="{{ id }}">
+              {% else %}
+                <input type="submit" class="big ui primary button" value="Submit Records for Order">
+              {% endif %}
             {% endif %}
     </div>
 </div>
 
 <div class="ui search">
-  <input class="prompt" type="text" placeholder="Search inventory..." style="width: 30%;">
+  <input class="prompt" type="text" id="searchbar" placeholder="Search inventory..." style="width: 30%;">
   <div class="results"></div>
 </div>
 
@@ -223,6 +230,8 @@
     <thead>
       <tr>
         <th>Date</th>
+        <th>First</th>
+        <th>Last</th>
         <th>Method</th>
         <th>Total</th>
         <th>Update</th>
@@ -235,6 +244,8 @@
       <tr id="{{ purchase.id }}">
 
           <td class="table-input">{{ purchase['purchaseDate'] }}</td>
+          <td class="table-input">{{ purchase['firstName'] }}</td>
+          <td class="table-input">{{ purchase['lastName'] }}</td>
           <td class="table-input">{{ purchase['paymentMethod'] }}</td>
             <!-- {% if purchase.paid == True %}
           <td class="table-input">Confirmed</td>
@@ -330,7 +341,7 @@
       </tr>
     </thead>
     <tbody>
-      
+      {% if custpurchase[0] != "noData" %}
       {% for purchase in custpurchase %}
       <tr id="{{ custpurchase['id'] }}">
 
@@ -351,6 +362,7 @@
         </form>
       </tr>
       {% endfor %}
+      {% endif %}
       
       
     </tbody>

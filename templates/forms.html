@@ -266,10 +266,17 @@
             <div class="field" id="customer">
                 <label>Customer</label>
                 <select class="ui fluid dropdown" name="customer" required>
+                    {% if customer %}
+                    {% for i in customer %}
+                    <option value="{{ i['customerID'] }}">{{ i['firstName'] }} {{ i['lastName'] }}</option>
+                    {% endfor %}
+                    {% endif %}
+                    {% if customers %}
                     <option></option>
                     {% for customer in customers %}
                     <option value="{{ customer['customerID'] }}">{{ customer['firstName'] }} {{ customer['lastName'] }}</option>
                     {% endfor %}
+                    {% endif %}
                 </select>
             </div>
 
