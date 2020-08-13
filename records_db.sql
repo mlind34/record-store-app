@@ -48,7 +48,6 @@ CREATE TABLE `records` (
   `price` DEC(5, 2) NOT NULL,
   `quantity` int NOT NULL,
   `img` varchar(1000),
-  `distributor` varchar(255),
   PRIMARY KEY (`productID`),
   FOREIGN KEY (`distributorID`) REFERENCES `distributors` (`distributorID`)
 ) ENGINE=InnoDB;
@@ -61,7 +60,6 @@ CREATE TABLE `orders` (
   `distributorID` int,
   `orderDate` DATE NOT NULL,
   `orderFilled` BOOLEAN NOT NULL,
-  `distributor` varchar(255),
   `orderTotal` DEC(5, 2),
   PRIMARY KEY (`orderID`),
   FOREIGN KEY (`distributorID`) REFERENCES `distributors`(`distributorID`) ON DELETE CASCADE
@@ -108,24 +106,24 @@ CREATE TABLE `orderedItems` (
 
 
 
-INSERT INTO customers (firstName, lastName, street, city, state, zip, phone, email) VALUES
-    ('Joe', 'Smith', 'H Street', 'Seattle', 'WA', '78654', '345-678-9043', 'joesmith@gmail.com'),
-    ('Sally', 'Anderson', 'Fake Avenue', 'Los Angeles', 'CA', '45896', '231-781-1209', 'sally_anderson@yahoo.com'),
-    ('John', 'Lee', '456 Street', 'Dallas', 'TX', '89412', '456-9016-5673', 'john_lee@outlook.com')
-    ;
+-- INSERT INTO customers (firstName, lastName, street, city, state, zip, phone, email) VALUES
+--     ('Joe', 'Smith', 'H Street', 'Seattle', 'WA', '78654', '345-678-9043', 'joesmith@gmail.com'),
+--     ('Sally', 'Anderson', 'Fake Avenue', 'Los Angeles', 'CA', '45896', '231-781-1209', 'sally_anderson@yahoo.com'),
+--     ('John', 'Lee', '456 Street', 'Dallas', 'TX', '89412', '456-9016-5673', 'john_lee@outlook.com')
+--     ;
 
 
-INSERT INTO purchases (customerID, purchaseDate, paymentMethod, totalPrice) VALUES
-    ((SELECT customerID FROM customers WHERE firstName = 'Joe' AND lastName = 'Smith'), '2019-07-14', 'Cash', 23.87),
-    ((SELECT customerID FROM customers WHERE firstName = 'Sally' AND lastName = 'Anderson'),'2018-05-24', 'Card', 31.45),
-    ((SELECT customerID FROM customers WHERE firstName = 'Joe' AND lastName = 'Smith'), '2018-05-27', 'Card', 65.17)
-    ;
+-- INSERT INTO purchases (customerID, purchaseDate, paymentMethod, totalPrice) VALUES
+--     ((SELECT customerID FROM customers WHERE firstName = 'Joe' AND lastName = 'Smith'), '2019-07-14', 'Cash', 23.87),
+--     ((SELECT customerID FROM customers WHERE firstName = 'Sally' AND lastName = 'Anderson'),'2018-05-24', 'Card', 31.45),
+--     ((SELECT customerID FROM customers WHERE firstName = 'Joe' AND lastName = 'Smith'), '2018-05-27', 'Card', 65.17)
+--     ;
 
-INSERT INTO records (name, artist, year, price, quantity, distributor) VALUES
-    ('Let it Be', 'The Beatles', '1970', 15.00, 1, 'Records R Us'),
-    ('Beggars Banquet', 'The Rolling Stones', '1968', 12.50, 2, 'Records R Us'),
-    ('Electric Ladyland', 'Jimi Hendrix', '1968', 20.00, 1, 'Records R Us')
-    ;
+-- INSERT INTO records (name, artist, year, price, quantity) VALUES
+--     ('Let it Be', 'The Beatles', '1970', 15.00, 1, 'Records R Us'),
+--     ('Beggars Banquet', 'The Rolling Stones', '1968', 12.50, 2, 'Records R Us'),
+--     ('Electric Ladyland', 'Jimi Hendrix', '1968', 20.00, 1, 'Records R Us')
+--     ;
 
 
 -- INSERT INTO distributors (name, street, city, state, zip, phone) VALUES
@@ -134,9 +132,9 @@ INSERT INTO records (name, artist, year, price, quantity, distributor) VALUES
 --     ('House of Vinyl', '123 Utah Steet', 'Salt Lake City', 'UT', '12908', '451-671-5612')
 --     ;
 
-INSERT INTO orders (distributorID, orderDate, orderFilled, distributor, orderTotal) VALUES
-    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2020-06-15', true, 'House of Vinyl', 45),
-    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2019-01-06', true, 'Vinyl Warehouse', 67),
-    ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2018-02-18', true, 'Records R Us', 23)
-    ;
+-- INSERT INTO orders (distributorID, orderDate, orderFilled, orderTotal) VALUES
+--     ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2020-06-15', true,  45),
+--     ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2019-01-06', true,  67),
+--     ((SELECT distributorID from distributors where name = 'House of Vinyl'), '2018-02-18', true,  23)
+--     ;
 

@@ -77,7 +77,7 @@
   </div>
 
 <!-- DISTRIBUTORS VIEW -->
-{% elif distributors %}
+{% elif distributors or title == 'No Search Results' %}
 <div class="dist-header">
         <h1 id="viewTitle">Distributors</h1>
 
@@ -126,6 +126,7 @@
             </thead>
             <tbody>
 
+                {% if distributors %}
                 {% for distributor in distributors %}
                 <tr id="{{ distributor['distributorID'] }}" name='distributor'>
                   
@@ -148,25 +149,31 @@
                 </form>
             </tr>
             {% endfor %}
-
+            {% endif %}
             </tbody>
         </table>    
+
+        <!-- IF NO SEARCH RESULTS -->
+        {% if title == 'No Search Results' %}
+              <h1 style="color: white; text-align: center;">No Results That Match That Search Query</h1>
+        {% endif %}
       </div>
 
 <!-- RECORDS VIEW -->
-{% elif (records or recordsPurch) %}
+{% elif (records or recordsPurch) or title == 'Records' %}
 
 <div class="record-header">
-{% if records %}
+{% if title == 'Records' %}
 <h1 id="viewTitle">Records</h1>
 {% endif %}
+
 {% if recordsPurch %}
 <h1 id="viewTitle">Select Records for Purchase</h1>
 {% endif %}
 
 <div class="btn-wrapper">
     <div class="add-btn">
-        {% if records %}
+        {% if title == 'Records' %}
         <form action="/records/add-record">
             <input type="submit" class="big ui primary button" value="Add Record">
         </form>
@@ -204,6 +211,7 @@
       </tr>
     </thead>
     <tbody>
+      {% if records %}
       
       {% for record in records %}
       <tr id="{{ record[productID] }}">
@@ -216,6 +224,9 @@
           <td class="table-input">{{ record['distributor'] }}</td>
       </tr>
       {% endfor %}
+      {% endif %}
+
+      {% if recordsPurch %}
       {% for record in recordsPurch %}
       <tr id="{{ record[productID] }}">
           <td class="table-input">${{ record['price'] }}</td>
@@ -223,13 +234,14 @@
           <td class="table-input">{{ record['year']}}</td>
           <td class="table-input">{{ record['artist'] }}</td>
           <td class="table-input">{{ record['name'] }}</td>
-          <td class="table-input"><img src="{{ record['img'] }}"></td>
+          <td class="table-input" style="text-align: center;"><img src="{{ record['img'] }}"></td>
 
           <td class="table-input">{{ record['distributor'] }}</td>
           <td><input class="ui teal button" type="submit" value="Add to Purchase" id="{{ record['productID'] }}"></td>
       </tr>
       {% endfor %}
-      
+
+      {% endif %}
     </tbody>
       
   </table>
@@ -268,14 +280,9 @@
           <td class="table-input">{{ purchase['firstName'] }}</td>
           <td class="table-input">{{ purchase['lastName'] }}</td>
           <td class="table-input">{{ purchase['paymentMethod'] }}</td>
-            <!-- {% if purchase.paid == True %}
-          <td class="table-input">Confirmed</td>
-            {% else %}
-            <td class="table-input">Missing Payment</td>
-            {% endif %} -->
           <td class="table-input">{{ purchase['totalPrice'] }}</td>
           
-          <form action="/purchaseItems" method="POST">
+          <form action="/purchase-items" method="POST">
             <td><input type="submit" value="View Items" class="ui blue button" id="{{ purchase.id }}"></td>
             <td><input type="hidden" name="purchaseID" value="{{ purchase['purchaseID'] }}" style="display: none;"></td>
         </form>
@@ -289,7 +296,7 @@
   </table>
 
   <!-- ORDERS VIEW -->
-  {% elif orders %}
+  {% elif orders or title == 'Orders' %}
   <h1 id="genericTitle">All Open Orders</h1>
   <h2 id="genericTitle">Check Orders to Fill and Click Add To Inventory</h2>
 
@@ -316,7 +323,7 @@
       </tr>
     </thead>
     <tbody >
-      
+      {% if orders %}
       {% for order in orders %}
       <tr id="{{ order.order_id }}">
           
@@ -347,7 +354,7 @@
       </tr>
       {% endfor %}
       
-      
+      {% endif %}
     </tbody>
       
   </table>
@@ -361,9 +368,6 @@
         <th>Date</th>
         <th>Method</th>
         <th>Total</th>
-        <!-- <th>Delete</th>
-        <th>Update</th>
-        <th>Add Item</th> -->
         <th>View Items</th>
       </tr>
     </thead>
@@ -374,16 +378,10 @@
 
           <td class="table-input">{{ purchase['purchaseDate'] }}</td>
           <td class="table-input">{{ purchase['paymentMethod'] }}</td>
-            <!-- {% if purchase.paid == True %}
-          <td class="table-input">Confirmed</td>
-            {% else %}
-            <td class="table-input">Missing Payment</td>
-            {% endif %} -->
+           
           <td class="table-input">{{ purchase['totalPrice'] }}</td>
-          <!-- <td><input type="submit" value="Delete" class="ui red button"></td>
-          <td><input type="submit" value="Update" class="ui teal button" id="{{ purchase.id }}"></td>
-          <td><input type="submit" value="Add Item" class="ui blue button" id="{{ purchase.id }}"></td> -->
-          <form action="/purchaseItems" method="POST">
+          
+          <form action="/purchase-items" method="POST">
             <td><input type="submit" value="View Items" class="ui blue button" id="{{ purchase.id }}"></td>
             <td><input type="hidden" name="purchaseID" value="{{ purchase['purchaseID'] }}" style="display: none;"></td>
         </form>
@@ -399,7 +397,7 @@
 {% elif inventory %}
 
 <h1>Displaying Inventory For {{ dist_name }}</h1>
-
+<p>inventory provided by discogs.com</p>
 <div class="ui link cards">
                     
   {% for i in inventory %}
@@ -417,7 +415,6 @@
     </div>
     
     <div class="extra content">
-      <!-- <button type="submit" class="add-to-order">Add to Order</button> -->
       
       <span>
         <i class="money icon"></i>
@@ -433,10 +430,6 @@
     
   </div>
   {% endfor %}
-
-
-
-
 
 
  {% elif ordered_items %}
@@ -465,12 +458,6 @@
     {% endfor %}
 
 
-
-
-
-
-
-
 {% elif purchaseItems %}
   <div class="record-header">
     <h1 id="viewTitle">Items</h1>
@@ -482,7 +469,7 @@
             <th>Year</th>
             <th>Artist</th>
             <th>Name</th>
-            <th>Distributor</th>
+            <th style="text-align: center;">Cover Art</th>
     
           </tr>
         </thead>
@@ -494,15 +481,13 @@
               <td class="table-input">{{ record['year']}}</td>
               <td class="table-input">{{ record['artist'] }}</td>
               <td class="table-input">{{ record['name'] }}</td>
-              <td class="table-input">{{ record['distributor'] }}</td>
+              <td class="table-input" style="text-align: center;"><img src="{{ record['img'] }}" alt=""></td>
           </tr>
           {% endfor %}
         </tbody>
           
       </table>
     </div>
-
-
 
 {% endif %}
 

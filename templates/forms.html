@@ -116,7 +116,7 @@
 {% elif title == 'Add Distributor' %}
 <div class="ui container">
     <form class="ui form" action="/distributors/add-distributor" method="POST">
-        <h3 class="ui dividing header">Distributors</h3>
+        <h3 class="ui dividing header">Add a New Distributor</h3>
         
             
             <div class="field">
@@ -220,12 +220,12 @@
         <h3 class="ui dividing header">Add Record</h3>
         <div class="two fields">
             <div class="field">
-                <label>Price</label>
-                <input type="text" name="price" placeholder="Price">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Name">
             </div>
             <div class="field">
-                <label>Quantity</label>
-                <input type="text" name="quantity" placeholder="Quantity">
+                <label>Artist</label>
+                <input type="text" name="artist" placeholder="Artist">
             </div>
         </div>
 
@@ -235,23 +235,20 @@
                 <input type="text" name="year" placeholder="Year">
             </div>
             <div class="field">
-                <label>Artist</label>
-                <input type="text" name="artist" placeholder="Artist">
+                <label>Quantity</label>
+                <input style="width: 20%" type="number" name="quantity" placeholder="Qauntity">
             </div>
         </div>
      
             <div class="two fields">
                 
                 <div class="field">
-                    <label>Name</label>
-                    <input type="text" name="name" placeholder="Name">
+                    <label>Price</label>
+                    <input style="width: 20%" type="text" name="price" placeholder="$">
                 </div>
             </div>
 
-            <div class="field">
-                <label>Distributor</label>
-                <input type="text" name="distributor" placeholder="Distributor">
-            </div>
+            
 
         <button class="ui primary button" type="submit">Submit</button>
     </form>
@@ -305,7 +302,6 @@
 <!-- CREATE ORDER FORM -->
 {% elif distributor_order %}
 
-    <!-- <div class="ui container dist-select"> -->
     <h1 id="newOrderTitle">Select a Distributor</h1>
 
     <form action="/orders/add-order/create-order" method="POST">
@@ -320,7 +316,6 @@
         <button type="submit" class="ui blue button" id="beginOrder">Begin Your Order</button>
     </form>
     
-    <!-- </div> -->
 
 {% elif dist_inventory %}
 
