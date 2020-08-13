@@ -47,7 +47,7 @@
             data.id = buttons2[i].id;  
           }
           let subReq = new XMLHttpRequest();
-          subReq.open("ADD", "http://flip1.engr.oregonstate.edu:4380/purchases/add-purchase/final", true);
+          subReq.open("ADD", "http://flip1.engr.oregonstate.edu:4381/purchases/add-purchase/final", true);
           subReq.setRequestHeader("content-type", "application/json");
           subReq.addEventListener("load", () => {
               data = JSON.parse(data);
@@ -251,7 +251,8 @@ function updateRequest(postData){
           if (target.dataset.quantity == 0){
               return
           }
-          itemQuantity  = target.closest('div').getElementsByClassName('ui dropdown selection')[0].outerText
+          console.log(target.closest('div').getElementsByClassName('ui dropdown selection')[0].innerText)
+          itemQuantity  = target.closest('div').getElementsByClassName('ui dropdown selection')[0].innerText
           let product_id = target.dataset.id;
           let dist_id = target.dataset.dist_id;
           let price = target.dataset.price
@@ -262,7 +263,7 @@ function updateRequest(postData){
           
         
           total += Number(price * itemQuantity);
-          console.log(itemQuantity)
+          total = Number(total.toFixed(2))
           orderTotal.innerText = `Total Price: $${total}`; 
           createRow(artist, name, product_id, dist_id, img, itemQuantity);
       }
@@ -335,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function(){
 function orderRequest (orderData) {
   let req = new XMLHttpRequest()
  
-  req.open("POST", "http://flip1.engr.oregonstate.edu:4380/orders/add-order/confirm-order", true);
+  req.open("POST", "http://flip1.engr.oregonstate.edu:4381/orders/add-order/confirm-order", true);
       req.setRequestHeader("content-type", "application/json");
       req.addEventListener("load", () => {
           if (req.status >= 200 && req.status < 400){
@@ -400,7 +401,6 @@ function addInventory(addorders){
 
 function filterRecords(){
   let searchBar = document.getElementById("searchbar");
-  console.log(searchBar);
   if(searchBar) {
     searchBar.addEventListener('keyup', (event) => {
         let curRows = document.querySelectorAll('tr');
@@ -420,3 +420,17 @@ function filterRecords(){
    }
 }
 filterRecords();
+
+
+
+
+// QUERY SEARCH FUNCITONALITY FOR ORDERS
+orderSearch = document.getElementById('orderSearch')
+if(orderSearch){
+    console.log(orderSearch)
+        submitSearch = document.getElementById('submitSearch')
+        console.log(submitSearch)
+        submitSearch.addEventListener('click', function(){
+            console.log(orderSearch.value)
+        })
+}

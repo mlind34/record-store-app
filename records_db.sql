@@ -34,7 +34,7 @@ CREATE TABLE `distributors` (
   `city` varchar(255) NOT NULL,
   `state` varchar(255) NOT NULL,
   `zip` varchar(5) NOT NULL,
-  `phone` varchar(10) NOT NULL,
+  `phone` varchar(15) NOT NULL,
   PRIMARY KEY (`distributorID`)
 ) ENGINE=InnoDB;
 
@@ -47,6 +47,7 @@ CREATE TABLE `records` (
   `year` YEAR NOT NULL,
   `price` DEC(5, 2) NOT NULL,
   `quantity` int NOT NULL,
+  `img` varchar(1000),
   `distributor` varchar(255),
   PRIMARY KEY (`productID`),
   FOREIGN KEY (`distributorID`) REFERENCES `distributors` (`distributorID`)

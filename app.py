@@ -14,7 +14,6 @@ CORS(app)
 
 
 
-
 # 
 # VIEWS
 # 
@@ -94,7 +93,27 @@ def show_distributor():
     if request.method == 'GET':
         distributors = 'SELECT distributorID, name, street, city, state, zip, phone FROM distributors'
         distributors_query = execute_query(sql_connection, distributors).fetchall()
-        return render_template('views.html', distributors=distributors_query, title='Distributors')
+        
+    if request.method == 'POST':
+        print("-----------TEST-----------")
+        print(request.form)
+        if request.form.get('option') == 'name':
+            name = request.form.get('search')
+            name_query = f"SELECT name, street, city, state, zip, phone from distributors WHERE name='{name}'"
+            name_info = execute_query(sql_connection, name_query).fetchall()
+            print(name_info)
+            return render_template('views.html', distributors=name_info)
+
+        
+        if request.form.get('option') == 'city':
+            city = request.form.get('search')
+            city_query = f"SELECT name, street, city, state, zip, phone from distributors WHERE city='{city}'"
+            city_info = execute_query(sql_connection, city_query).fetchall()
+            print(city_info)
+            return render_template('views.html', distributors=city_info)
+            
+    
+    return render_template('views.html', distributors=distributors_query, title='Distributors')
 
     
 
@@ -106,7 +125,7 @@ def show_distributor():
 def show_records():
     sql_connection = connect_to_database()
     if request.method == 'GET':
-        records = 'SELECT productID, name, artist, year, price, quantity, distributor FROM records'
+        records = 'SELECT productID, name, artist, year, price, img, quantity, distributor FROM records'
         records_query = execute_query(sql_connection, records).fetchall()
         return render_template('views.html', records=records_query, title='Records')
 
@@ -118,7 +137,7 @@ def view_purchases():
     sql_connection = connect_to_database()
     if request.method == 'GET':
         purchases = 'SELECT purchases.purchaseID, purchases.purchaseDate, purchases.paymentMethod, purchases.totalPrice, \
-        customers.firstName, customers.lastName FROM purchases INNER JOIN customers ON customers.customerID = purchases.customerID'
+        customers.firstName, customers.lastName FROM purchases LEFT JOIN customers ON customers.customerID=purchases.customerID'
         purchases_query = execute_query(sql_connection, purchases).fetchall()
         return render_template('views.html', purchases=purchases_query, title='Purchases')
 
@@ -148,7 +167,7 @@ def view_cust_purchases(var):
         purchases_query = ["noData"]
     firstName = name_query[0]['firstName']
     lastName = name_query[0]['lastName']
-    return render_template('views.html', custpurchase=purchases_query, title= firstName+' '+lastName+' Purchases')
+    return render_template('views.html', custpurchase=purchases_query, title= 'Purchases for ' + firstName + " " + lastName)
 
 
 
@@ -167,9 +186,11 @@ def add_customer():
         street = request.form['street']
         city = request.form['city']
         state = request.form['state']
+        zip_code = request.form['zip']
         email = request.form['email']
         phone = request.form['phone']
-        add_customer = f"INSERT INTO customers(firstName, lastName, street, city, state, email, phone) VALUES ('{firstName}', '{lastName}', '{street}', '{city}', '{state}', '{email}', '{phone}')"
+        add_customer = f"INSERT INTO customers(firstName, lastName, street, city, state, zip, email, phone) VALUES ('{firstName}', \
+        '{lastName}', '{street}', '{city}', '{state}', {zip_code}, '{email}', '{phone}')"
         customer_query = execute_query(sql_connection, add_customer).fetchall()
         return redirect('/customers')
     
@@ -228,6 +249,7 @@ def create_inventory():
                 title = response['results'][j]['title']
                 title = title.replace('"', '')
                 title = title.replace("'","")
+                title = title.replace("*", "")
                 title = title.encode('ascii', 'ignore').decode('ascii')
                 title = title.split('-')
                 artist = title[0]
@@ -394,12 +416,18 @@ def select_dist():
 def create_order():
     sql_connection = connect_to_database()
     if request.method == 'POST':
-        print(request.form)
-        dist_name = request.form['distributor']
-        print(dist_name)
-        dist_inventory_query = f"SELECT inventoryID, distributorID, name, artist, year, price, quantity, img FROM distInventory WHERE distributorID=(SELECT distributorID FROM distributors WHERE name='{dist_name}')"
-        dist_inventory = execute_query(sql_connection, dist_inventory_query).fetchall()
-        return render_template('forms.html', dist_inventory=dist_inventory, dist_name=dist_name)
+        if request.form['distributor'] != None:
+            dist_name = request.form['distributor']
+            print(dist_name)
+            dist_inventory_query = f"SELECT inventoryID, distributorID, name, artist, year, price, quantity, img FROM distInventory WHERE distributorID=(SELECT distributorID FROM distributors WHERE name='{dist_name}')"
+            dist_inventory = execute_query(sql_connection, dist_inventory_query).fetchall()
+            return render_template('forms.html', dist_inventory=dist_inventory, dist_name=dist_name)
+
+    
+
+            
+        
+    
 
 # CONFIRM ORDER
 @app.route('/orders/add-order/confirm-order', methods=['GET', 'POST'])
@@ -439,12 +467,12 @@ def view_order():
     if request.method == 'POST':
         order_id = request.form['order_id']
 
-        items_query = f"SELECT d.name, d.artist, d.price, d.img, o.quantity FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={order_id}"
+        items_query = f"SELECT d.name, d.artist, d.price, d.img, o.quantity, o.orderID FROM distInventory d INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={order_id}"
         ordered_items = execute_query(sql_connection, items_query).fetchall()
 
-        print(ordered_items)
+        orderID = ordered_items[0]['orderID']
 
-        return render_template('views.html', ordered_items=ordered_items)
+        return render_template('views.html', ordered_items=ordered_items, orderID=orderID)
 
 
 
@@ -459,27 +487,27 @@ def fill_orders():
         print(orders)
         for i in range(len(orders)):
             
-            order_info_query = f"SELECT d.inventoryID, d.name, d.artist, d.price, d.year, (SELECT name from distributors WHERE distributorID={orders[i]['distributor_id']}) AS distributor, o.quantity FROM distInventory d \
+            order_info_query = f"SELECT d.inventoryID, d.name, d.artist, d.price, d.year, d.img, (SELECT name from distributors WHERE distributorID={orders[i]['distributor_id']}) AS distributor, o.quantity FROM distInventory d \
             INNER JOIN orderedItems o ON d.inventoryID=o.inventoryID WHERE o.orderID={orders[i]['order_id']} "
 
-            # order_filled = f"UPDATE orders SET orderFilled=True WHERE orderID={orders[i]['order_id']}"
-            # execute_query(sql_connection, order_filled)
+            order_filled = f"UPDATE orders SET orderFilled=True WHERE orderID={orders[i]['order_id']}"
+            execute_query(sql_connection, order_filled)
 
             record_info = execute_query(sql_connection, order_info_query).fetchall()
 
-            records += [record_info]
+            records.append(record_info)
 
-        print("-----------------TEST---------------------")
-        for i in range(len(records)):
-            print(records[i])
-            add_records_query = f"INSERT INTO records (productID, price, name, artist, year, distributor, quantity)\
-             VALUES ({records[i]['inventoryID']}, {records[i]['price']}, '{records[i]['name']}', \
-            '{records[i]['artist']}', '{records[i]['year']}', '{records[i]['distributor']}', {records[i]['quantity']}) \
-            ON DUPLICATE KEY UPDATE SET quantity=quantity+{records[i]['quantity']}"
+        
 
-            execute_query(sql_connection, add_records_query)
+        for i in records:
+            for j in i:
+                add_records_query = f"INSERT INTO records (productID, price, name, artist, year, distributor, img, quantity)\
+                VALUES ({j['inventoryID']}, {j['price']}, '{j['name']}', \
+                '{j['artist']}', '{j['year']}', '{j['distributor']}', '{j['img']}', {j['quantity']}) \
+                ON DUPLICATE KEY UPDATE quantity=quantity+{j['quantity']}"
+
+                execute_query(sql_connection, add_records_query)
 
             
     
         return redirect('/records')
-

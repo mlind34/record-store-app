@@ -14,6 +14,7 @@
     text-align: end;
     margin-right: 10%;
     bottom: 3%;
+    margin-top: 2%;
 }
 
 /* Customer table */
@@ -203,7 +204,7 @@ img {
 .ui.right.rail {
     left: 72%;
     padding: 0 0 0 2rem;
-    margin: 18rem 0 0 -11rem;
+    margin: 20rem 0 0 -11rem;
     width: 34%;
     position: fixed;
 }
@@ -226,6 +227,7 @@ div.order-title {
 .ui.segment {
     overflow-y: scroll;
     height: 50%;
+    margin-top: 25%;
 }
 
 td.table-input.checkbox {
@@ -257,4 +259,39 @@ td.table-input.checkbox {
 
 .ui.dropdown.order {
     min-width: 0%;
+}
+
+th {
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+.ui.search.order {
+    text-align: left;
+    margin-left: 1%;
+    bottom: 3%;
+    margin-top: 2%;
+    margin-bottom: -6%;
+}
+
+.ui.action.input {
+    margin-left: 1%;
+    margin-bottom: -1%;
+}
+
+#orderHeader {
+    text-align: center;
+    font-size: 3rem;
+}
+
+#distBtns {
+    display: inline-flex;
+    margin-left: 10%;
+}
+
+#addDist {
+    margin-left: 195%;
 }

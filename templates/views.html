@@ -2,8 +2,7 @@
 {% block content %}
 
 <!-- CUSTOMERS VIEW -->
-{% if customers %}
-<h1>test</h1>
+{% if customers or title == 'Customers' %}
 
 <div class="customer-header">
     <h1 id="viewTitle">Customers</h1>
@@ -34,12 +33,15 @@
             <th>Zip Code</th>
             <th>E-mail address</th>
             <th>Phone Number</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>Delete</th>
+            <th>View Purchases</th>
+            <th>Create Purchase</th>
+            <th>Update Info</th>
         </tr>
         </thead>
         <tbody>
+
+        {% if customers %}
         
         {% for customer in customers %}
 
@@ -66,6 +68,7 @@
         </tr>
 
         {% endfor %}
+        {% endif %}
         
         
         </tbody>
@@ -78,10 +81,24 @@
 <div class="dist-header">
         <h1 id="viewTitle">Distributors</h1>
 
-        <div class="btn-wrapper">
+        <div class="btn-wrapper" id="distBtns">
+          <form action="/distributors" method="POST">
+
+            <div class="ui action input">
+                <input type="text" placeholder="Search..." name="search">
+                <input type="hidden" name="dist_id" value="">
+              
+                <input type="hidden" name="dist_id" value="">
+                <select class="ui compact selection dropdown" id="searchFilter" name="option">
+                  <option selected="" value="name" >Name</option>
+                  <option value="city">City</option>
+                </select>
+                <div><button class="ui button" type="submit">Search</button></div>
+              </div>
+            </form>
             <div class="add-btn">
                 <form action="/distributors/add-distributor">
-                    <input type="submit" class="big ui primary button" value="Add Distributor">
+                    <input type="submit" class="big ui primary button" value="Add Distributor" id="addDist">
                 </form>
             </div>
     
@@ -176,7 +193,8 @@
         <th>Quantity</th>
         <th>Year</th>
         <th>Artist</th>
-        <th>Name</th>
+        <th>Title</th>
+        <th style="text-align: center;">Cover Art</th>
         <th>Distributor</th>
         
         {% if recordsPurch %}
@@ -194,6 +212,7 @@
           <td class="table-input">{{ record['year']}}</td>
           <td class="table-input">{{ record['artist'] }}</td>
           <td class="table-input">{{ record['name'] }}</td>
+          <td class="table-input" style="text-align: center;"><img src="{{ record['img'] }}" alt=""></td>
           <td class="table-input">{{ record['distributor'] }}</td>
       </tr>
       {% endfor %}
@@ -204,6 +223,8 @@
           <td class="table-input">{{ record['year']}}</td>
           <td class="table-input">{{ record['artist'] }}</td>
           <td class="table-input">{{ record['name'] }}</td>
+          <td class="table-input"><img src="{{ record['img'] }}"></td>
+
           <td class="table-input">{{ record['distributor'] }}</td>
           <td><input class="ui teal button" type="submit" value="Add to Purchase" id="{{ record['productID'] }}"></td>
       </tr>
@@ -216,8 +237,8 @@
 
 
 <!-- PURCHASES VIEW -->
-  {% elif purchases %}
-  <h1 id="genericTitle">Purchases</h1>
+  {% elif purchases or title == 'Purchases' %}
+  <h1 id="genericTitle">All Purchases</h1>
 
   <div class="btn-wrapper">
         <div class="add-btn">
@@ -235,12 +256,11 @@
         <th>Last</th>
         <th>Method</th>
         <th>Total</th>
-        <th>Update</th>
         <th>View Items</th>
       </tr>
     </thead>
     <tbody>
-      
+      {% if purchases %}
       {% for purchase in purchases %}
       <tr id="{{ purchase.id }}">
 
@@ -255,13 +275,13 @@
             {% endif %} -->
           <td class="table-input">{{ purchase['totalPrice'] }}</td>
           
-          <td><input type="submit" value="Update" class="ui teal button" id="{{ purchase.id }}"></td>
           <form action="/purchaseItems" method="POST">
             <td><input type="submit" value="View Items" class="ui blue button" id="{{ purchase.id }}"></td>
             <td><input type="hidden" name="purchaseID" value="{{ purchase['purchaseID'] }}" style="display: none;"></td>
         </form>
       </tr>
       {% endfor %}
+      {% endif %}
       
       
     </tbody>
@@ -420,11 +440,28 @@
 
 
  {% elif ordered_items %}
-  {% for item in ordered_items %}
-    <h2>{{ item['artist'] }} - {{ item['name'] }}</h2>
-    <img src="{{item['img']}}">
-    <h2>${{ item['price'] }}</h2>
-    <h3>Quantity - {{ item['quantity'] }}</h3>
+ <h1 style="text-align: center;">Order Details For Order # {{orderID}}</h1>
+
+ <table class="ui striped table">
+    <thead>
+      <th>Artist</th>
+      <th>Title</th>
+      <th style="text-align: center;">Cover Art</th>
+      <th>Price</th>
+      <th>Quantity</th>
+    </thead>
+    <tbody>
+      {% for item in ordered_items %}
+      <tr>
+        <td class="table-input">{{ item['artist'] }}</td>
+        <td class="table-input">{{ item['name'] }}</td>
+        <td class="table-input" style="text-align: center;"><img src="{{ item['img'] }}" alt=""></td>
+        <td class="table-input">{{ item['price'] }}</td>
+        <td class="table-input">{{ item['quantity'] }}</td>
+      </tr>
+    </tbody>
+
+
     {% endfor %}
 
 

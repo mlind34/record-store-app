@@ -325,37 +325,35 @@
 {% elif dist_inventory %}
 
 
-<h1 id="orderTitle">Order for {{ dist_name }}</h1>
+<h1 id="orderHeader">Create Order For {{ dist_name }}</h1>
 
-<div class="two feilds">
-    
-        <div class="ui search">
-            <input type="text" class="prompt" id="orderSearch" placeholder="search inventory...">
-            <i class="search icon"></i>
-        </div>
-        <div class="results"></div>
 
-</div>
+
 
 <div class="ui right rail" id="myOrder">
+    
     <div class="ui segment">
       <h3 id="orderTitle">My Order</h3>
       <div id="orderTable">
 
       </div>
       <div>
-          <h4 id="orderTotal"></h4>
-            <input type="submit" class="ui blue button" id="orderConfirm" value="Place Order">
       </div>
     </div>
+    <input type="submit" class="ui blue button" id="orderConfirm" value="Place Order">
+    <h4 id="orderTotal"></h4>
+
+
 </div>
 
+
 <div class="ui link cards" id="orderCards">
-                    
-    {% for item in dist_inventory %}
 
     
-        
+
+    {% if dist_inventory %}
+        {% for item in dist_inventory %}
+
     <div class="card">
       <div class="image" id="albumImage">
         <img src={{ item['img'] }}>
@@ -385,18 +383,21 @@
             <select name="" class="ui dropdown order" style="margin-top: 10%; margin-right: 34%;">
             {% for i in range(1, item['quantity'] + 1) %}
                 <option value="{{ i }}">{{ i }}</option>
+            
             {% endfor %}
+
             </select>
             </div>
         
-            <button style="margin-top: 10%;" class="record-info" type="submit" data-price="{{ item['price'] }}" data-quantity="{{ item['quantity'] }}" 
+            <button style="margin-top: 10%;" class="ui inverted blue button record-info" type="submit" data-price="{{ item['price'] }}" data-quantity="{{ item['quantity'] }}" 
             data-id="{{ item['inventoryID'] }}" data-dist_id="{{ item['distributorID'] }}" data-name="{{ item['name'] }}" data-artist="{{ item['artist'] }}" data-img="{{ item['img'] }}" id="addAlbum" class="add-to-order">Add to Order</button>
         
       </div>
-      
     </div>
-
     {% endfor %}
+    {% endif %}
+
+
 
 {% endif %}
 <script>
