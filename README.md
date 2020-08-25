@@ -1,3 +1,1 @@
-# record_store_crud_app
-CRUD application of a record store
-***IN PROGRESS***
+Music store web application with a complete inventory system for record dealers, distributors and customers incorporating the discogs.com API. 
