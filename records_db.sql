@@ -106,6 +106,8 @@ CREATE TABLE `orderedItems` (
 
 
 
+-- SITE POPULATED USING UI, THESE ARE OLD SAMPLE DATA QUERIES
+
 -- INSERT INTO customers (firstName, lastName, street, city, state, zip, phone, email) VALUES
 --     ('Joe', 'Smith', 'H Street', 'Seattle', 'WA', '78654', '345-678-9043', 'joesmith@gmail.com'),
 --     ('Sally', 'Anderson', 'Fake Avenue', 'Los Angeles', 'CA', '45896', '231-781-1209', 'sally_anderson@yahoo.com'),

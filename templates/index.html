@@ -1,110 +1,109 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <head>
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+
     {% if title %}
-        <title>Groovie's - {{ title }}</title>
+    <title>Groovie's - {{ title }}</title>
     {% else %}
-        <title>Groovie's</title>
+    <title>Groovie's</title>
     {% endif %}
-
-</head>
-<body>
+  </head>
+  <body>
     <div class="ui menu">
-        
-          <a class="active item" href="/home">
-            Home
-          </a>
-          <div class="right menu">
-            <a class="right item" href="/customers">
-              Customers
-            </a>
-            <a class="item" href="/distributors">
-              Distributors
-            </a>
-            <a class="item" href="/records">
-              Records
-            </a>
-        </div>
-      
-        
+      <a class="active item" href="/home">
+        Home
+      </a>
+      <div class="right menu">
+        <a class="right item" href="/customers">
+          Customers
+        </a>
+        <a class="item" href="/distributors">
+          Distributors
+        </a>
+        <a class="item" href="/records">
+          Records
+        </a>
       </div>
+    </div>
 
+    <h2><a href="/home">Home Page</a></h2>
+    <ul>
+      <li>
+        Home Page to navigate to different main pages such as Customers,
+        Records, and Distributors
+      </li>
+    </ul>
 
-      <h2><a href="/home">Home Page</a></h2>
-        <ul>
-            <li>
-                Home Page to navigate to different main pages such as Customers, Records, and Distributors
-            </li>
-        </ul>
+    <h2><a href="/customers">Customers</a></h2>
+    <ul>
+      <li>View Customers - SELECT query</li>
+      <li>Delete Customer - Optional DELETE query</li>
+      <li>Update Customer - Optional PUT query</li>
+    </ul>
 
-        <h2><a href="/customers">Customers</a></h2>
-        <ul>
-            <li>View Customers - SELECT query</li>
-            <li>Delete Customer - Optional DELETE query</li>
-            <li>Update Customer - Optional PUT query</li>
-        </ul>
+    <h2><a href="/customers/add-customer">Add Customer</a></h2>
+    <ul>
+      <li>Add Customer - INSERT query</li>
+    </ul>
 
-        <h2><a href="/customers/add-customer">Add Customer</a></h2>
-        <ul>
-            <li>Add Customer - INSERT query</li>
-        </ul>
+    <h2><a href="/records">Records</a></h2>
+    <ul>
+      <li>View Records - SELECT query</li>
+    </ul>
 
-        <h2><a href="/records">Records</a></h2>
-        <ul>
-            <li>View Records - SELECT query</li>
-            
-        </ul>
+    <h2><a href="records/add-record">Add Record</a></h2>
+    <ul>
+      <li>Add Record - INSERT query</li>
+    </ul>
 
-        <h2><a href="records/add-record">Add Record</a></h2>
-        <ul>
-            <li>Add Record - INSERT query</li>
-        </ul>
+    <h2><a href="/distributors">Distributors</a></h2>
+    <ul>
+      <li>View Distributors - SELECT query</li>
+      <li>Update Distributor - Optional PUT query</li>
+    </ul>
 
-        <h2><a href="/distributors">Distributors</a></h2>
-        <ul>
-            <li>View Distributors - SELECT query</li>
-            <li>Update Distributor - Optional PUT query</li>
-        </ul>
+    <h2><a href="/distributors/add-distributor">Add Distributor</a></h2>
+    <ul>
+      <li>Add Distributor - INSERT query</li>
+    </ul>
 
-        <h2><a href="/distributors/add-distributor">Add Distributor</a></h2>
-        <ul>
-            <li>Add Distributor - INSERT query</li>
-        </ul>
+    <h2><a href="/purchases">Purchases</a></h2>
+    <ul>
+      <li>View Purchases - SELECT query</li>
+    </ul>
 
-        <h2><a href="/purchases">Purchases</a></h2>
-        <ul>
-            <li>View Purchases - SELECT query</li>
-        </ul>
+    <h2><a href="/purchases/add-purchase">Add Purchase</a></h2>
+    <ul>
+      <li>Add a Purchase - INSERT query</li>
+    </ul>
 
-        <h2><a href="/purchases/add-purchase">Add Purchase</a></h2>
-        <ul>
-            <li>Add a Purchase - INSERT query</li>
-        </ul>
+    <h2><a href="/orders">Orders</a></h2>
+    <ul>
+      <li>View Orders - SELECT query</li>
+      <li>View Order Items - SELECT query that returns items for that order</li>
+    </ul>
 
+    <h2><a href="/orders/add-order">Add Order</a></h2>
+    <ul>
+      <li>Add Order - INSERT query</li>
+    </ul>
 
-        <h2><a href="/orders">Orders</a></h2>
-        <ul>
-            <li>View Orders - SELECT query</li>
-            <li>View Order Items - SELECT query that returns items for that order</li>
-
-        </ul>
-
-        <h2><a href="/orders/add-order">Add Order</a></h2>
-        <ul>
-            <li>Add Order - INSERT query</li>
-        </ul>
-        
-
-
-    {% block content%}
-    {% endblock %}
+    {% block content%} {% endblock %}
 
     <script src="/static/index.js"></script>
-</body>
-</html> 
+  </body>
+</html>
